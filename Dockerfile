@@ -1,5 +1,6 @@
 FROM debian:bullseye-slim
-ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64"
+ENV DEBIAN_FRONTEND=noninteractive
+ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib"
 RUN rm /etc/apt/sources.list && \
     echo "fs.file-max = 65535" > /etc/sysctl.conf && \
     echo "deb http://deb.debian.org/debian bullseye main contrib non-free" >> /etc/apt/sources.list && \
@@ -18,7 +19,7 @@ RUN rm /etc/apt/sources.list && \
     cd /src && \
     git clone --recursive https://github.com/quictls/openssl /src/openssl && \
     cd /src/openssl && \
-    ./Configure --prefix=/curllib/openssl no-shared && \
+    ./Configure --prefix=/curllib/openssl && \
     make && \
     make install && \
     
@@ -34,7 +35,7 @@ RUN rm /etc/apt/sources.list && \
     git clone --recursive https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
-    ./configure PKG_CONFIG_PATH=/curllib/openssl/lib64/pkgconfig:/curllib/nghttp3/lib64/pkgconfig LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64" --prefix=/curllib/ngtcp2 --enable-lib-only && \
+    ./configure PKG_CONFIG_PATH=/curllib/openssl/lib/pkgconfig:/curllib/nghttp3/lib/pkgconfig LDFLAGS="-Wl,-rpath,/curllib/openssl/lib" --prefix=/curllib/ngtcp2 --enable-lib-only --with-openssl && \
     make && \
     make install && \
     
