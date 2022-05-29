@@ -40,7 +40,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: buildx-${{ github.sha 
+          key: buildx-${{ github.sha }}
+          restore-keys: buildx
 
       - name: Build
         uses: docker/build-push-action@v3
