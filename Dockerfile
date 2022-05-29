@@ -1,5 +1,5 @@
 FROM alpine
-RUN apk add --no-cache git autoconf build-base libtool pkgconfig linux-headers
+RUN apk add --no-cache git autoconf build-base libtool pkgconfig linux-headers automake
 
 RUN mkdir /src
 
