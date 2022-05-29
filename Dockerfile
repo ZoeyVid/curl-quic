@@ -46,5 +46,5 @@ RUN rm /etc/apt/sources.list && \
     
     rm -rf /src
     
-ENTRYPOINT [curl]
+ENTRYPOINT ["curl"]
 CMD -V
