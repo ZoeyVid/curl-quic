@@ -31,7 +31,7 @@ RUN cd /src && \
     git clone --recursive https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
-    ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared && \
+    ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared --enable-static --enable-ares && \
     make && \
     make install
     
