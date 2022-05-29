@@ -6,7 +6,7 @@ RUN apk add --no-cache git autoconf build-base && \
     cd /src && \
     git clone --recursive https://github.com/quictls/openssl /src/openssl && \
     cd /src/openssl && \
-    ./Configure --prefix=/curllib/openssl && \
+    ./Configure --prefix=/curllib/openssl no-shared & \
     make && \
     make install && \
     
