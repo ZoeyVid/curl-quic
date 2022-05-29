@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64" ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2
+ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64"
 RUN rm /etc/apt/sources.list && \
     echo "fs.file-max = 65535" > /etc/sysctl.conf && \
     echo "deb http://deb.debian.org/debian bullseye main contrib non-free" >> /etc/apt/sources.list && \
@@ -42,6 +42,7 @@ RUN rm /etc/apt/sources.list && \
     git clone --recursive https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
+    ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 && \
     make && \
     make install && \
     
