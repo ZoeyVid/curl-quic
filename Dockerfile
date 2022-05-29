@@ -14,40 +14,40 @@ RUN rm /etc/apt/sources.list && \
     apt autoclean -y && \
     apt clean -y && \
     apt -o DPkg::Options::="--force-confnew" -y install git autoconf build-essential libtool pkg-config && \
-    mkdir /src && \
+    mkdir /src
     
-    cd /src && \
+RUN cd /src && \
     git clone --recursive https://github.com/quictls/openssl /src/openssl && \
     cd /src/openssl && \
     ./Configure --prefix=/curllib/openssl && \
     make && \
-    make install && \
+    make install
     
-    cd /src && \
+RUN cd /src && \
     git clone --recursive https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
     ./configure --enable-lib-only --prefix=/curllib/nghttp3 && \
     make && \
-    make install && \
+    make install
     
-    cd /src && \
+RUN cd /src && \
     git clone --recursive https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
-    ./configure PKG_CONFIG_PATH=/curllib/openssl/lib/pkgconfig:/curllib/nghttp3/lib/pkgconfig LDFLAGS="-Wl,-rpath,/curllib/openssl/lib" --prefix=/curllib/ngtcp2 --enable-lib-only --with-openssl && \
+    ./configure PKG_CONFIG_PATH=/curllib/openssl/lib/pkgconfig:/curllib/nghttp3/lib/pkgconfig LDFLAGS="-Wl,-rpath,/curllib/openssl/lib" --prefix=/curllib/ngtcp2 --enable-lib-only --with-openssl=/src/openssl && \
     make && \
-    make install && \
+    make install
     
-    cd /src && \
+RUN cd /src && \
     git clone --recursive https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
     ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 && \
     make && \
-    make install && \
+    make install
     
-    rm -rf /src
+RUN rm -rf /src
     
 ENTRYPOINT ["curl"]
 CMD -V
