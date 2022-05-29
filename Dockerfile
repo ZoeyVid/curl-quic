@@ -27,8 +27,7 @@ RUN cd /src && \
     make install
 
 ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64"
-RUN apk add --no-cache c-ares && \
-    cd /src && \
+RUN cd /src && \
     git clone --recursive https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
