@@ -37,6 +37,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Cache Docker layers
+        continue-on-error: true
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
