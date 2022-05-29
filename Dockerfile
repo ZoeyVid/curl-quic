@@ -32,6 +32,7 @@ RUN cd /src && \
     cd /src/curl && \
     autoreconf -fi
 RUN apk add --no-cache c-ares && \
+    cd /src/curl && \
     ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared --enable-static --enable-ares && \
     make && \
     make install
