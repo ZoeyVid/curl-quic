@@ -1,5 +1,5 @@
 FROM alpine
-RUN apk add --no-cache git autoconf build-base libtool pkg-config
+RUN apk add --no-cache git autoconf build-base libtool pkgconfig
     
 RUN cd /src && \
     git clone --recursive https://github.com/quictls/openssl /src/openssl && \
