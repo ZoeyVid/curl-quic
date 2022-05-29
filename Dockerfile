@@ -12,7 +12,7 @@ RUN rm /etc/apt/sources.list && \
     apt autoremove --purge -y && \
     apt autoclean -y && \
     apt clean -y && \
-    apt -o DPkg::Options::="--force-confnew" -y install git autoconf build-essential && \
+    apt -o DPkg::Options::="--force-confnew" -y install git autoconf build-essential libtool && \
     mkdir /src && \
     
     cd /src && \
