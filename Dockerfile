@@ -26,12 +26,17 @@ RUN cd /src && \
     make && \
     make install
 
+RUN git clone --recursive https://github.com/c-ares/c-ares && \
+    ./configure --prefix=/curllib/c-ares && \
+    make && \
+    make install
+
 ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64"
 RUN cd /src && \
     git clone --recursive https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
-    ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared --enable-static --enable-ares && \
+    ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared --enable-static --enable-ares=/curllib/c-ares && \
     make && \
     make install
     
