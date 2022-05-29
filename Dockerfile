@@ -1,4 +1,4 @@
-FROM alpine
+FROM debian:bullseye-slim
 ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64" ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2
 RUN rm /etc/apt/sources.list && \
     echo "fs.file-max = 65535" > /etc/sysctl.conf && \
