@@ -26,7 +26,10 @@ RUN cd /src && \
     make && \
     make install
 
-RUN git clone --recursive https://github.com/c-ares/c-ares && \
+RUN cd /src && \
+    git clone --recursive https://github.com/c-ares/c-ares && \
+    cd /src/c-ares && \
+    autoreconf -fi && \
     ./configure --prefix=/curllib/c-ares && \
     make && \
     make install
