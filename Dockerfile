@@ -1,6 +1,6 @@
 FROM alpine
 ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64" ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2
-RUN apk add --no-cache git autoconf && \
+RUN apk add --no-cache git autoconf build-essential && \
     mkdir /src && \
     
     cd /src && \
