@@ -42,7 +42,7 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: buildx-${{ github.sha }}
-          restore-keys: buildx
+          restore-keys: buildx-${{ secrets.CACHE_ID }}
 
       - name: Build
         uses: docker/build-push-action@v3
