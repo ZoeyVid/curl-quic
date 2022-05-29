@@ -50,4 +50,4 @@ RUN cd /src && \
 RUN rm -rf /src
     
 ENTRYPOINT ["curl"]
-CMD -V
+CMD ["-V"]
