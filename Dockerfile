@@ -25,6 +25,7 @@ RUN rm /etc/apt/sources.list && \
     cd /src && \
     git clone --recursive https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
     cd /src/nghttp3 && \
+    autoreconf -fi && \
     ./configure --enable-lib-only --prefix=/curllib/nghttp3 && \
     make && \
     make install && \
