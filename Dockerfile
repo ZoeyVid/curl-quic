@@ -1,5 +1,6 @@
-FROM alpine
-RUN apk add --no-cache ca-certificates git autoconf build-base libtool pkgconfig linux-headers automake
+FROM alpine as build
+ARG CURL_VERSION=curl-7_83_1
+RUN apk add --no-cache ca-certificates libtool pkgconfig linux-headers git autoconf build-base automake
 
 RUN mkdir /src
 
@@ -36,14 +37,25 @@ RUN cd /src && \
 
 ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64"
 RUN cd /src && \
-    git clone --recursive https://github.com/curl/curl /src/curl && \
+    git clone --branch ${CURL_VERSION} --recursive https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
     ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared --enable-static --enable-ares=/curllib/c-ares && \
     make && \
     make install
     
-RUN rm -rf /src
-    
+FROM alpine
+COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
+COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+COPY --from=build /curllib/c-ares/lib/libcares.so.2 /curllib/c-ares/lib/libcares.so.2
+COPY --from=build /curllib/nghttp3/lib/libnghttp3.so.2 /curllib/nghttp3/lib/libnghttp3.so.2
+COPY --from=build /curllib/ngtcp2/lib/libngtcp2_crypto_openssl.so.2 /curllib/ngtcp2/lib/libngtcp2_crypto_openssl.so.2
+COPY --from=build /curllib/ngtcp2/lib/libngtcp2.so.3 /curllib/ngtcp2/lib/libngtcp2.so.3
+COPY --from=build /curllib/openssl/lib64/libssl.so.81.3 /curllib/openssl/lib64/libssl.so.81.3
+COPY --from=build /curllib/openssl/lib64/libcrypto.so.81.3 /curllib/openssl/lib64/libcrypto.so.81.3
+COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+
+RUN apk add --no-cache ca-certificates libtool pkgconfig linux-headers
+
 ENTRYPOINT ["curl"]
 CMD ["-V"]
