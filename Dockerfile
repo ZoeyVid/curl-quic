@@ -55,8 +55,7 @@ COPY --from=build /curllib/openssl/lib64/libssl.so.81.3 /curllib/openssl/lib64/l
 COPY --from=build /curllib/openssl/lib64/libcrypto.so.81.3 /curllib/openssl/lib64/libcrypto.so.81.3
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 
-RUN apk add --no-cache ca-certificates 
-#libtool pkgconfig linux-headers
+RUN apk add --no-cache ca-certificates
 
 ENTRYPOINT ["curl"]
 CMD ["-V"]
