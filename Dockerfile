@@ -45,6 +45,9 @@ RUN cd /src && \
     make install
     
 FROM alpine
+
+RUN apk add --no-cache ca-certificates
+
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 COPY --from=build /curllib/c-ares/lib/libcares.so.2 /curllib/c-ares/lib/libcares.so.2
@@ -54,8 +57,6 @@ COPY --from=build /curllib/ngtcp2/lib/libngtcp2.so.3 /curllib/ngtcp2/lib/libngtc
 COPY --from=build /curllib/openssl/lib64/libssl.so.81.3 /curllib/openssl/lib64/libssl.so.81.3
 COPY --from=build /curllib/openssl/lib64/libcrypto.so.81.3 /curllib/openssl/lib64/libcrypto.so.81.3
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-
-RUN apk add --no-cache ca-certificates
 
 ENTRYPOINT ["curl"]
 CMD ["-V"]
