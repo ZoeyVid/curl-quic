@@ -45,7 +45,6 @@ RUN cd /src && \
     make install
     
 FROM busybox:1.34.1
-
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
