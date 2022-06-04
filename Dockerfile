@@ -1,4 +1,4 @@
-FROM alpine as build
+FROM alpine:3.16.0 as build
 ARG CURL_VERSION=curl-7_83_1
 RUN apk add --no-cache ca-certificates libtool pkgconfig linux-headers git autoconf build-base automake
 
@@ -44,7 +44,7 @@ RUN cd /src && \
     make && \
     make install
     
-FROM alpine
+FROM alpine:3.16.0
 
 RUN apk add --no-cache ca-certificates
 
