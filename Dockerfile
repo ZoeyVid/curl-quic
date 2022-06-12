@@ -1,7 +1,8 @@
 FROM --platform=${BUILDPLATFORM} alpine:3.16.0 as build
 ARG QUICHE_VERSION=0.14.0 \
     NGHTTP2_VERSION=v1.47.0 \
-    CURL_VERSION=curl-7_83_1
+    CURL_VERSION=curl-7_83_1 \
+    CARES_VERSION=cares-1_18_1
 RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
 RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 
@@ -16,7 +17,7 @@ RUN cd /src && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
 
 RUN cd /src && \
-    git clone --recursive https://github.com/c-ares/c-ares /src/c-ares && \
+    git clone --recursive --branch ${CARES_VERSION} https://github.com/c-ares/c-ares /src/c-ares && \
     cd /src/c-ares && \
     autoreconf -fi && \
     ./configure && \
