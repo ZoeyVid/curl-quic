@@ -40,7 +40,8 @@ RUN cd /src && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install
 
-FROM --platform=${BUILDPLATFORM} busybox:1.35.0
+FROM --platform=${BUILDPLATFORM} alpine
+#busybox:1.35.0
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
