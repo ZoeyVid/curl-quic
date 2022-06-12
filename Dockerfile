@@ -1,61 +1,55 @@
-FROM alpine:3.16.0 as build
-ARG CURL_VERSION=curl-7_83_1
-RUN apk add --no-cache ca-certificates libtool pkgconfig linux-headers git autoconf build-base automake
+FROM alpine:3.16.0 
+# as build
+ARG QUICHE_VERSION=0.14.0 \
+    NGHTTP2_VERSION=v1.47.0 \
+    CURL_VERSION=curl-7_83_1
+RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
+RUN wget -q -O - https://sh.rustup.rs -sSf | sh -s -- -y
 
 RUN mkdir /src
+RUN mkdir /curllib
 
 RUN cd /src && \
-    git clone --recursive https://github.com/quictls/openssl /src/openssl && \
-    cd /src/openssl && \
-    ./Configure --prefix=/curllib/openssl && \
-    make && \
-    make install
-    
-RUN cd /src && \
-    git clone --recursive https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
-    cd /src/nghttp3 && \
-    autoreconf -fi && \
-    ./configure --enable-lib-only --prefix=/curllib/nghttp3 && \
-    make && \
-    make install
-    
-RUN cd /src && \
-    git clone --recursive https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
-    cd /src/ngtcp2 && \
-    autoreconf -fi && \
-    ./configure PKG_CONFIG_PATH=/curllib/openssl/lib64/pkgconfig:/curllib/nghttp3/lib/pkgconfig LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64" --prefix=/curllib/ngtcp2 --enable-lib-only && \
-    make && \
-    make install
+    git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
+    cd /src/quiche && \
+    source $HOME/.cargo/env && \
+    cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
+    mkdir quiche/deps/boringssl/src/lib && \
+    ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
 
 RUN cd /src && \
-    git clone --recursive https://github.com/c-ares/c-ares && \
+    git clone --recursive https://github.com/c-ares/c-ares /src/c-ares && \
     cd /src/c-ares && \
     autoreconf -fi && \
-    ./configure --prefix=/curllib/c-ares && \
-    make && \
-    make install
+    ./configure && \
+    make -j "$(nproc)" && \
+    make -j "$(nproc)" install
 
-ARG LDFLAGS="-Wl,-rpath,/curllib/openssl/lib64"
 RUN cd /src && \
-    git clone --branch ${CURL_VERSION} --recursive https://github.com/curl/curl /src/curl && \
+    git clone --recursive --branch ${NGHTTP2_VERSION} https://github.com/nghttp2/nghttp2 /src/nghttp2 && \
+    cd /src/nghttp2 && \
+    autoreconf -fi && \
+    ./configure && \
+    make -j "$(nproc)" && \
+    make -j "$(nproc)" install
+
+RUN cd /src && \
+    git clone --recursive --branch ${CURL_VERSION} https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
-    ./configure --with-openssl=/curllib/openssl --with-nghttp3=/curllib/nghttp3 --with-ngtcp2=/curllib/ngtcp2 --disable-shared --enable-static --enable-ares=/curllib/c-ares && \
-    make && \
-    make install
-    
+    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static --enable-ares=/src/c-ares && \
+    make -j "$(nproc)" && \
+    make -j "$(nproc)" install
+
 FROM busybox:1.35.0
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
+COPY --from=build /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-COPY --from=build /curllib/c-ares/lib/libcares.so.2 /curllib/c-ares/lib/libcares.so.2
-COPY --from=build /curllib/nghttp3/lib/libnghttp3.so.2 /curllib/nghttp3/lib/libnghttp3.so.2
-COPY --from=build /curllib/ngtcp2/lib/libngtcp2_crypto_openssl.so.2 /curllib/ngtcp2/lib/libngtcp2_crypto_openssl.so.2
-COPY --from=build /curllib/ngtcp2/lib/libngtcp2.so.3 /curllib/ngtcp2/lib/libngtcp2.so.3
-COPY --from=build /curllib/openssl/lib64/libssl.so.81.3 /curllib/openssl/lib64/libssl.so.81.3
-COPY --from=build /curllib/openssl/lib64/libcrypto.so.81.3 /curllib/openssl/lib64/libcrypto.so.81.3
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+COPY --from=build /usr/local/lib/libcares.so.2 /usr/local/lib/libcares.so.2
+COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
 
 ENTRYPOINT ["curl"]
 CMD ["-V"]
