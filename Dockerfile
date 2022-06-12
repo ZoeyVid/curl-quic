@@ -3,7 +3,7 @@ ARG QUICHE_VERSION=0.14.0 \
     NGHTTP2_VERSION=v1.47.0 \
     CURL_VERSION=curl-7_83_1
 RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
-RUN wget -q -O - https://sh.rustup.rs -sSf | sh -s -- -y
+RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 
 RUN mkdir /src
 RUN mkdir /curllib
