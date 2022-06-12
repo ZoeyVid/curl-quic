@@ -46,7 +46,6 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certifica
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
 COPY --from=build /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 COPY --from=build /usr/local/lib/libcares.so.2 /usr/local/lib/libcares.so.2
 COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
 
