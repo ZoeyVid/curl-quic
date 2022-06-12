@@ -6,7 +6,6 @@ RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf
 RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 
 RUN mkdir /src
-RUN mkdir /curllib
 
 RUN cd /src && \
     git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
