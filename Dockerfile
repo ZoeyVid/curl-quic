@@ -1,4 +1,4 @@
-FROM alpine:3.16.0 as build
+FROM --platform=${BUILDPLATFORM} alpine:3.16.0 as build
 ARG QUICHE_VERSION=0.14.0 \
     NGHTTP2_VERSION=v1.47.0 \
     CURL_VERSION=curl-7_83_1
@@ -40,7 +40,7 @@ RUN cd /src && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install
 
-FROM busybox:1.35.0
+FROM --platform=${BUILDPLATFORM} busybox:1.35.0
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
