@@ -14,6 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -90,4 +91,4 @@ jobs:
 
       - name: show version (PR)
         if: ${{ github.event_name == 'pull_request' }}
-        run: docker run --rm ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }} -V
+        run: docker run --rm ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }} -V
