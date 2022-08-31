@@ -10,6 +10,7 @@ RUN mkdir /src
 
 RUN cd /src && \
     git clone --recursive https://github.com/cloudflare/quiche /src/quiche && \
+#    git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     source $HOME/.cargo/env && \
     cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
