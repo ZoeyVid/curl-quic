@@ -1,6 +1,6 @@
 FROM --platform=${BUILDPLATFORM} alpine:3.16.2 as build
-ARG QUICHE_VERSION=0.14.0 \
-    NGHTTP2_VERSION=v1.47.0 \
+ARG QUICHE_VERSION=0.15.0 \
+    NGHTTP2_VERSION=v1.50.0 \
     CURL_VERSION=curl-7_85_0  \
     CARES_VERSION=cares-1_18_1
 RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
@@ -9,8 +9,8 @@ RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 RUN mkdir /src
 
 RUN cd /src && \
-    git clone --recursive https://github.com/cloudflare/quiche /src/quiche && \
-#    git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
+#    git clone --recursive https://github.com/cloudflare/quiche /src/quiche && \
+    git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     source $HOME/.cargo/env && \
     cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
