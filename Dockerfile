@@ -2,7 +2,7 @@ FROM --platform=${BUILDPLATFORM} alpine:3.16.2 as build
 
 ARG QUICHE_VERSION=0.16.0
 ARG NGHTTP2_VERSION=v1.50.0
-ARG CURL_VERSION=curl-7_85_0
+ARG CURL_VERSION=curl-7_86_0
 
 RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
 RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
