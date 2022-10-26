@@ -42,6 +42,8 @@ COPY --from=build /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
 
+RUN curl --http3 -sIL https://cloudflare-quic.com
+
 LABEL org.opencontainers.image.source="https://github.com/SanCraftDev/curl-quic"
 ENTRYPOINT ["curl"]
 CMD ["-V"]
