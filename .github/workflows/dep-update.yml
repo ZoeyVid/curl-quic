@@ -1,0 +1,96 @@
+name: dependency-updates
+
+on:
+  schedule:
+    - cron:  "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  quiche-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: update quiche version
+        id: update
+        run: |
+          QUICHE_VERSION="$(
+          git ls-remote --tags https://github.com/cloudflare/quiche \
+              | cut -d/ -f3 \
+              | sort -V \
+              | tail -1 \
+              | sed -E "s/\^\{\}//"
+          )"
+          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION|" ./Dockerfile
+          echo "version=$QUICHE_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update quiche version to ${{ steps.update.outputs.version }}
+          branch: update-quiche-version
+          title: update quiche version to ${{ steps.update.outputs.version }}
+          body: update quiche version to ${{ steps.update.outputs.version }}
+
+
+  nghttp2-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: update nghttp2 version
+        id: update
+        run: |
+          NGHTTP2_VERSION="$(
+          git ls-remote --tags https://github.com/nghttp2/nghttp2 \
+              | cut -d/ -f3 \
+              | sort -V \
+              | tail -1 \
+              | sed -E "s/\^\{\}//"
+          )"
+          sed -i "s|ARG NGHTTP2_VERSION=.*|ARG NGHTTP2_VERSION=$NGHTTP2_VERSION|" ./Dockerfile
+          echo "version=$NGHTTP2_VERSION" >> $NGHTTP2_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update nghttp2 version to ${{ steps.update.outputs.version }}
+          branch: update-nghttp2-version
+          title: update nghttp2 version to ${{ steps.update.outputs.version }}
+          body: update nghttp2 version to ${{ steps.update.outputs.version }}
+
+
+  curl-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: update curl version
+        id: update
+        run: |
+          CURL_VERSION="$(
+          git ls-remote --tags https://github.com/curl/curl curl-*_*_* \
+              | cut -d/ -f3 \
+              | sort -V \
+              | tail -1 \
+              | sed -E "s/\^\{\}//"
+          )"
+          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" ./Dockerfile
+          echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update curl version to ${{ steps.update.outputs.version }}
+          branch: update-curl-version
+          title: update curl version to ${{ steps.update.outputs.version }}
+          body: update curl version to ${{ steps.update.outputs.version }}
