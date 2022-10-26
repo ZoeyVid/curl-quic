@@ -3,7 +3,6 @@ FROM --platform=${BUILDPLATFORM} alpine:3.16.2 as build
 ARG QUICHE_VERSION=0.16.0
 ARG NGHTTP2_VERSION=v1.50.0
 ARG CURL_VERSION=curl-7_85_0
-ARG CARES_VERSION=cares-1_18_1
 
 RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
 RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
@@ -20,14 +19,6 @@ RUN cd /src && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
 
 RUN cd /src && \
-    git clone --recursive --branch ${CARES_VERSION} https://github.com/c-ares/c-ares /src/c-ares && \
-    cd /src/c-ares && \
-    autoreconf -fi && \
-    ./configure && \
-    make -j "$(nproc)" && \
-    make -j "$(nproc)" install
-
-RUN cd /src && \
     git clone --recursive --branch ${NGHTTP2_VERSION} https://github.com/nghttp2/nghttp2 /src/nghttp2 && \
     cd /src/nghttp2 && \
     autoreconf -fi && \
@@ -39,7 +30,7 @@ RUN cd /src && \
     git clone --recursive --branch ${CURL_VERSION} https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
-    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static --enable-ares=/src/c-ares && \
+    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install
 
