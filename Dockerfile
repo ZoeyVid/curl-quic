@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} alpine:3.16.3 as build
+FROM alpine:20221110 as build
 
 ARG QUICHE_VERSION=0.16.0
 ARG NGHTTP2_VERSION=v1.50.0
@@ -34,12 +34,11 @@ RUN cd /src && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install
 
-FROM --platform=${BUILDPLATFORM} busybox:1.35.0
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+FROM alpine:20221110
+RUN apk add --no-cache ca-certificates
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
 COPY --from=build /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
-COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
 
 RUN curl --http3 -sIL https://cloudflare-quic.com
