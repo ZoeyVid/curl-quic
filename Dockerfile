@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} alpine:3.16.2 as build
+FROM --platform=${BUILDPLATFORM} alpine:3.16.3 as build
 
 ARG QUICHE_VERSION=0.16.0
 ARG NGHTTP2_VERSION=v1.50.0
