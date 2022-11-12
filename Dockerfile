@@ -35,10 +35,9 @@ RUN cd /src && \
     make -j "$(nproc)" install
 
 FROM alpine:20221110
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates libgcc
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
-COPY --from=build /usr/lib/libgcc_s.so.1 /usr/lib/libgcc_s.so.1
 COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
 
 RUN curl --http3 -sIL https://cloudflare-quic.com
