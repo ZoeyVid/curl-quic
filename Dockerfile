@@ -1,7 +1,7 @@
 FROM alpine:20221110 as build
 
 ARG QUICHE_VERSION=0.16.0
-ARG NGHTTP2_VERSION=v1.50.0
+ARG NGHTTP2_VERSION=v1.51.0
 ARG CURL_VERSION=curl-7_86_0
 
 RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
