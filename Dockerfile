@@ -5,13 +5,12 @@ ARG NGHTTP2_VERSION=v1.51.0
 ARG CURL_VERSION=curl-7_86_0
 
 RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates git pkgconfig libtool make cmake autoconf automake musl-dev gcc g++
+RUN apk add --no-cache ca-certificates wget git make cmake gcc g++ autoconf automake pkgconfig libtool musl-dev
 RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 
 RUN mkdir /src
 
 RUN cd /src && \
-#    git clone --recursive https://github.com/cloudflare/quiche /src/quiche && \
     git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     source $HOME/.cargo/env && \
@@ -37,7 +36,7 @@ RUN cd /src && \
 
 FROM alpine:20221110
 RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates libgcc
+RUN apk add --no-cache ca-certificates wget libgcc
 
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
 COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
