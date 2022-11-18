@@ -43,6 +43,5 @@ COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.1
 
 RUN curl --http3 -sIL https://cloudflare-quic.com
 
-LABEL org.opencontainers.image.source="https://github.com/SanCraftDev/curl-quic"
-ENTRYPOINT ["curl"]
-CMD ["-V"]
+ENTRYPOINT curl
+CMD -V
