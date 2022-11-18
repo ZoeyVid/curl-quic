@@ -43,4 +43,4 @@ RUN apk upgrade --no-cache && \
     curl --http3 -sIL https://cloudflare-quic.com
 
 ENTRYPOINT curl
-CMD -V
+CMD ["-V"]
