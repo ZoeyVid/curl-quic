@@ -35,13 +35,12 @@ RUN cd /src && \
     make -j "$(nproc)" install
 
 FROM alpine:20221110
-RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates wget tzdata libgcc
-
 COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
 COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
 
-RUN curl --http3 -sIL https://cloudflare-quic.com
+RUN apk upgrade --no-cache && \
+    apk add --no-cache ca-certificates wget tzdata libgcc && \
+    curl --http3 -sIL https://cloudflare-quic.com
 
 ENTRYPOINT curl
 CMD -V
