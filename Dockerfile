@@ -42,5 +42,5 @@ RUN apk upgrade --no-cache && \
     apk add --no-cache ca-certificates wget tzdata libgcc && \
     curl --http3 -sIL https://cloudflare-quic.com
 
-ENTRYPOINT curl
+ENTRYPOINT ["curl"]
 CMD ["-V"]
