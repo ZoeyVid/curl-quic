@@ -5,7 +5,8 @@ ARG NGHTTP2_VERSION=v1.51.0
 ARG CURL_VERSION=curl-7_86_0
 
 RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates wget tzdata git rust cargo build-base cmake autoconf automake pkgconfig libtool musl-dev
+RUN apk add --no-cache ca-certificates wget tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev
+RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 
 RUN mkdir /src
 
