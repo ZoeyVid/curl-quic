@@ -5,7 +5,7 @@ ARG NGHTTP2_VERSION=v1.51.0
 ARG CURL_VERSION=curl-7_87_0
 
 RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates wget tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev
+RUN apk add --no-cache ca-certificates wget tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static
 RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
 
 RUN mkdir /src
@@ -19,27 +19,18 @@ RUN cd /src && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
 
 RUN cd /src && \
-    git clone --recursive --branch ${NGHTTP2_VERSION} https://github.com/nghttp2/nghttp2 /src/nghttp2 && \
-    cd /src/nghttp2 && \
-    autoreconf -fi && \
-    ./configure && \
-    make -j "$(nproc)" && \
-    make -j "$(nproc)" install
-
-RUN cd /src && \
     git clone --recursive --branch ${CURL_VERSION} https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
-    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static && \
-    make -j "$(nproc)" && \
-    make -j "$(nproc)" install
+    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static && \
+    make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/release -static -all-static" && \
+    strip -s /src/curl/src/curl
 
 FROM alpine:20221110
-COPY --from=build /usr/local/bin/curl /usr/local/bin/curl
-COPY --from=build /usr/local/lib/libnghttp2.so.14 /usr/local/lib/libnghttp2.so.14
+COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 
 RUN apk upgrade --no-cache && \
-    apk add --no-cache ca-certificates wget tzdata libgcc && \
+    apk add --no-cache ca-certificates wget tzdata && \
     curl --http3 -sIL https://cloudflare-quic.com
 
 ENTRYPOINT ["curl"]
