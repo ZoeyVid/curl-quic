@@ -1,4 +1,4 @@
-FROM alpine:20230208 as build
+FROM alpine:3.17.1 as build
 
 ARG QUICHE_VERSION=0.16.0
 ARG NGHTTP2_VERSION=v1.51.0
@@ -26,7 +26,7 @@ RUN cd /src && \
     make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/release -static -all-static" && \
     strip -s /src/curl/src/curl
 
-FROM alpine:20230208
+FROM alpine:3.17.1
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 
 RUN apk upgrade --no-cache && \
