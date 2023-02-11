@@ -1,8 +1,7 @@
 name: Build Docker Image
-
 on:
   push:
-    branches:    
+    branches:
       - develop
     paths:
       - Dockerfile
@@ -12,39 +11,33 @@ on:
       - Dockerfile
       - .github/workflows/docker.yml
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
           platforms: arm64 #all
-
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
-
       - name: Login to DockerHub
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ github.token }}
-
       - name: Build
         uses: docker/build-push-action@v4
         if: ${{ github.event_name != 'pull_request' }}
@@ -53,24 +46,21 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64 #,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6
           push: ${{ github.ref == 'refs/heads/develop' }}
-          tags: | 
-           ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
-           ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
-
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+            ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
       - name: show version
         if: ${{ github.ref == 'refs/heads/develop' }}
-        run: | 
-         docker run --rm ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
-         docker run --rm ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
-         
+        run: |
+          docker run --rm ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
+          docker run --rm ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
       - name: copy curl binary
         if: ${{ github.ref == 'refs/heads/develop' }}
-        run: | 
-         docker run --pull always --platform amd64 --name curl-x86_64 zoeyvid/curl-quic
-         docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
-         docker run --pull always --platform arm64 --name curl-aarch64 zoeyvid/curl-quic
-         docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
-         
+        run: |
+          docker run --pull always --platform amd64 --name curl-x86_64 zoeyvid/curl-quic
+          docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
+          docker run --pull always --platform arm64 --name curl-aarch64 zoeyvid/curl-quic
+          docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
       - uses: actions/upload-artifact@v3
         if: ${{ github.ref == 'refs/heads/develop' }}
         with:
@@ -78,7 +68,6 @@ jobs:
           path: |
             curl-x86_64
             curl-aarch64
-          
       - uses: "marvinpinto/action-automatic-releases@latest"
         if: ${{ github.ref == 'refs/heads/develop' }}
         with:
@@ -89,12 +78,10 @@ jobs:
           files: |
             curl-x86_64
             curl-aarch64
-
       - name: Set PR-Number (PR)
         if: ${{ github.event_name == 'pull_request' }}
         id: pr
         run: echo "pr=$(echo pr-${{ github.ref_name }} | sed "s/refs\/pull\/://g" | sed "s/\/merge//g")" >> $GITHUB_OUTPUT
-
       - name: Build (PR)
         uses: docker/build-push-action@v4
         if: ${{ github.event_name == 'pull_request' }}
@@ -104,11 +91,9 @@ jobs:
           platforms: linux/amd64,linux/arm64 #,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6
           push: ${{ github.event_name == 'pull_request' }}
           tags: ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }}
-
       - name: show version (PR)
         if: ${{ github.event_name == 'pull_request' }}
         run: docker run --rm ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }} -V
-          
       - name: add comment (PR)
         uses: mshick/add-pr-comment@v2
         if: ${{ github.event_name == 'pull_request' }}

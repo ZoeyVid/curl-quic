@@ -1,18 +1,15 @@
 name: dependency-updates
-
 on:
   push:
   schedule:
-    - cron:  "0 */6 * * *"
+    - cron: "0 */6 * * *"
   workflow_dispatch:
-
 jobs:
   quiche-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: update quiche version
         id: update
         run: |
@@ -25,7 +22,6 @@ jobs:
           )"
           sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION|" ./Dockerfile
           echo "version=$QUICHE_VERSION" >> $GITHUB_OUTPUT
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -35,13 +31,11 @@ jobs:
           branch: update-quiche-version
           title: update quiche version to ${{ steps.update.outputs.version }}
           body: update quiche version to ${{ steps.update.outputs.version }}
-
   curl-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: update curl version
         id: update
         run: |
@@ -54,7 +48,6 @@ jobs:
           )"
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" ./Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
-
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
