@@ -5,8 +5,8 @@ ARG NGHTTP2_VERSION=v1.51.0
 ARG CURL_VERSION=curl-7_87_0
 
 RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates wget tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static
-RUN wget -q -O - https://sh.rustup.rs | sh -s -- -y
+RUN apk add --no-cache ca-certificates tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static
+RUN wget https://sh.rustup.rs -O - | sh -s -- -y
 
 RUN mkdir /src
 
@@ -30,7 +30,7 @@ FROM alpine:3.17.1
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 
 RUN apk upgrade --no-cache && \
-    apk add --no-cache ca-certificates wget tzdata && \
+    apk add --no-cache ca-certificates tzdata && \
     curl --http3 -sIL https://cloudflare-quic.com
 
 ENTRYPOINT ["curl"]
