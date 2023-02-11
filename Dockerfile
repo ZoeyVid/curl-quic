@@ -30,7 +30,9 @@ COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 
 RUN apk upgrade --no-cache && \
     apk add --no-cache ca-certificates tzdata && \
-    curl --http3 -sIL https://cloudflare-quic.com
+    curl --http3 -sIL https://cloudflare-quic.com && \
+    mkdir -vp /host
 
+WORKDIR /host
 ENTRYPOINT ["curl"]
 CMD ["-V"]
