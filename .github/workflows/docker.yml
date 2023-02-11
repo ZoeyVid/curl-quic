@@ -62,6 +62,33 @@ jobs:
         run: | 
          docker run --rm ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
          docker run --rm ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
+         
+      - name: copy curl binary
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        run: | 
+         docker run --pull always --platform amd64 --name curl-x86_64 zoeyvid/curl-quic
+         docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
+         docker run --pull always --platform arm64 --name curl-aarch64 zoeyvid/curl-quic
+         docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
+         
+      - uses: actions/upload-artifact@v3
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        with:
+          name: artifacts
+          path: |
+            curl-x86_64
+            curl-aarch64
+          
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        with:
+          prerelease: false
+          repo_token: ${{ github.token }}
+          title: latest
+          automatic_release_tag: latest
+          files: |
+            curl-x86_64
+            curl-aarch64
 
       - name: Set PR-Number (PR)
         if: ${{ github.event_name == 'pull_request' }}
