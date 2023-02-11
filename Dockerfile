@@ -1,7 +1,6 @@
 FROM alpine:3.17.2 as build
 
 ARG QUICHE_VERSION=0.16.0
-ARG NGHTTP2_VERSION=v1.51.0
 ARG CURL_VERSION=curl-7_87_0
 
 RUN apk upgrade --no-cache
@@ -11,7 +10,7 @@ RUN wget https://sh.rustup.rs -O - | sh -s -- -y
 RUN mkdir /src
 
 RUN cd /src && \
-    git clone --recursive --branch ${QUICHE_VERSION} https://github.com/cloudflare/quiche /src/quiche && \
+    git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     source $HOME/.cargo/env && \
     cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
@@ -19,7 +18,7 @@ RUN cd /src && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
 
 RUN cd /src && \
-    git clone --recursive --branch ${CURL_VERSION} https://github.com/curl/curl /src/curl && \
+    git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
     ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static && \
