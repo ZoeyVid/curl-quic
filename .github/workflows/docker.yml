@@ -85,7 +85,7 @@ jobs:
           prerelease: false
           repo_token: ${{ github.token }}
           title: Binarys
-          automatic_release_tag: curl
+          automatic_release_tag: latest
           files: |
             curl-x86_64
             curl-aarch64
