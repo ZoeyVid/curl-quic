@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Read .version file
+        id: version
+        run: echo "version=$(cat Dockerfile | grep -wE "ARG CURL_VERSION=*" | sed "s|ARG ARG CURL_VERSION=||g" | sed "s|_|\.|g")" >> $GITHUB_OUTPUT
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
@@ -72,8 +75,8 @@ jobs:
         with:
           prerelease: false
           repo_token: ${{ github.token }}
-          title: Binarys
-          automatic_release_tag: latest
+          title: ${{ steps.version.outputs.version }}
+          automatic_release_tag: ${{ steps.version.outputs.version }}
           files: |
             curl-x86_64
             curl-aarch64
