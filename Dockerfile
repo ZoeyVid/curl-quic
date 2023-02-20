@@ -1,7 +1,7 @@
 FROM alpine:3.17.2 as build
 
 ARG QUICHE_VERSION=0.16.0
-ARG CURL_VERSION=curl-7_88_0
+ARG CURL_VERSION=curl-7_88_1
 
 RUN apk upgrade --no-cache
 RUN apk add --no-cache ca-certificates tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static
