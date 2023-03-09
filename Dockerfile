@@ -4,15 +4,13 @@ ARG QUICHE_VERSION=0.16.0
 ARG CURL_VERSION=curl-7_88_1
 
 RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static
-RUN wget https://sh.rustup.rs -O - | sh -s -- -y
+RUN apk add --no-cache ca-certificates tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static rust cargo
 
 RUN mkdir /src
 
 RUN cd /src && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
-    source $HOME/.cargo/env && \
     cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
