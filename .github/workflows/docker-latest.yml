@@ -28,3 +28,24 @@ jobs:
         run: |
           docker run --rm ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:latest -V
           docker run --rm ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:latest -V
+      - name: copy curl binary
+        run: |
+          docker run --pull always --platform amd64 --name curl-x86_64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:latest
+          docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
+          docker run --pull always --platform arm64 --name curl-aarch64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:latest
+          docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: |
+            curl-x86_64
+            curl-aarch64
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          prerelease: false
+          repo_token: ${{ github.token }}
+          title: ${{ steps.version.outputs.version }}
+          automatic_release_tag: ${{ steps.version.outputs.version }}
+          files: |
+            curl-x86_64
+            curl-aarch64
