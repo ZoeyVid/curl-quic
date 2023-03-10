@@ -11,7 +11,7 @@ RUN mkdir /src
 RUN cd /src && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
-    cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
+    CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
 
