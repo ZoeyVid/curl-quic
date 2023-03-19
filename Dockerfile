@@ -3,19 +3,14 @@ FROM rust:1.68.0-alpine3.17 as build
 ARG QUICHE_VERSION=0.16.0
 ARG CURL_VERSION=curl-7_88_1
 
-RUN apk upgrade --no-cache
-RUN apk add --no-cache ca-certificates tzdata git build-base cmake autoconf automake pkgconfig libtool musl-dev nghttp2-dev nghttp2-static
-
-RUN mkdir /src
-
-RUN cd /src && \
+RUN apk add --no-cache git build-base cmake autoconf automake pkgconfig libtool nghttp2-dev nghttp2-static musl-dev && \
+    mkdir /src &&\
+    cd /src && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
     mkdir quiche/deps/boringssl/src/lib && \
-    ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
-
-RUN cd /src && \
+    ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
@@ -25,10 +20,7 @@ RUN cd /src && \
 
 FROM alpine:3.17.2
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
-
-RUN apk upgrade --no-cache && \
-    apk add --no-cache ca-certificates tzdata && \
-    curl --http3 -sIL https://cloudflare-quic.com && \
+RUN curl --http3 -sIL https://cloudflare-quic.com && \
     mkdir -vp /host
 
 WORKDIR /host
