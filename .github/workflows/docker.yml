@@ -62,9 +62,9 @@ jobs:
       - name: copy curl binary
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
-          docker run --pull always --platform amd64 --name curl-x86_64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          docker run -d --pull always --platform amd64 --name curl-x86_64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
-          docker run --pull always --platform arm64 --name curl-aarch64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          docker run -d --pull always --platform arm64 --name curl-aarch64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
       - uses: actions/upload-artifact@v3
         if: ${{ github.ref == 'refs/heads/develop' }}
