@@ -6,8 +6,10 @@ RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
+    rustup target add x86_64-unknown-linux-musl && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
+    rustup target add aarch64-unknown-linux-musl && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
     fi && \
     mkdir quiche/deps/boringssl/src/lib && \
