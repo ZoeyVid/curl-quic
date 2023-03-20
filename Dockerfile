@@ -4,8 +4,8 @@ ARG QUICHE_VERSION=0.16.0 \
 
 RUN apt update && \
     apt install --yes git cmake && \
-    git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
-    cd /src && \
+    git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
+    cd /src/quiche && \
     if [ "$TARGETARCH" = "amd64" ]; then \
     apt install --yes crossbuild-essential-amd64 && \
     rustup target add x86_64-unknown-linux-gnu && \
