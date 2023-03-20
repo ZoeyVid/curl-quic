@@ -2,7 +2,8 @@ FROM --platform="$BUILDPLATFORM" rust:1.68.0 as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apt install --yes git cmake && \
+RUN apt update e&& \
+    apt install --yes git cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
