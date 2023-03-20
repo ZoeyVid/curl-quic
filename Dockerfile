@@ -21,20 +21,26 @@ RUN apt update && \
     fi
     
 
-FROM debian:testing-20230227-slim as curl-build
+FROM --platform="$BUILDPLATFORM" debian:testing-20230227-slim as curl-build
 ARG CURL_VERSION=curl-8_0_1 \
     TARGETARCH
 
 COPY --from=quiche-build /src/quiche /src/quiche
 RUN apt update && \
-    apt install --yes git build-essential autoconf automake libtool libnghttp2-dev && \
+    apt install --yes git autoconf automake libtool libnghttp2-dev && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
     if [ "$TARGETARCH" = "amd64" ]; then \
+    apt install --yes crossbuild-essential-amd64 && \
+    for c in "$(command -v gcc | head -1)"; do rm -f "$c" && ln -s "$(command -v x86_64-linux-gnu-gcc | head -1)" "$c"; done && \
+    for c in "$(command -v g++ | head -1)"; do rm -f "$c" && ln -s "$(command -v x86_64-linux-gnu-g++ | head -1)" "$c"; done && \
     ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/x86_64-unknown-linux-gnu/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/x86_64-unknown-linux-gnu/release --with-nghttp2 --disable-shared --enable-static && \
     make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/x86_64-unknown-linux-gnu/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/x86_64-unknown-linux-gnu/release -static -all-static"; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
+    apt install --yes crossbuild-essential-arm64 && \
+    for c in "$(command -v gcc | head -1)"; do rm -f "$c" && ln -s "$(command -v aarch64-linux-gnu-gcc | head -1)" "$c"; done && \
+    for c in "$(command -v g++ | head -1)"; do rm -f "$c" && ln -s "$(command -v aarch64-linux-gnu-g++ | head -1)" "$c"; done && \
     ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/aarch64-unknown-linux-gnu/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/aarch64-unknown-linux-gnu/release --with-nghttp2 --disable-shared --enable-static && \
     make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/aarch64-unknown-linux-gnu/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/aarch64-unknown-linux-gnu/release -static -all-static"; \
     fi && \
