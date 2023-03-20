@@ -1,16 +1,18 @@
-FROM --platform="$BUILDPLATFORM" rust:1.68.0-alpine3.17 as quiche-build
+FROM --platform="$BUILDPLATFORM" rust:1.68.0 as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
+RUN apt install --yes git cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
-    rustup target add x86_64-unknown-linux-musl && \
-    TARGET_CC=x86_64-alpine-linux-musl-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl; \
+    apt install -y crossbuild-essential-amd64 && \
+    rustup target add x86_64-unknown-linux-gnu && \
+    TARGET_CC=x86_64-linux-gnu-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-gnu; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
-    rustup target add aarch64-unknown-linux-musl && \
-    TARGET_CC=aarch64-none-elf-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
+    apt install -y crossbuild-essential-arm64 && \
+    rustup target add aarch64-unknown-linux-gnu && \
+    TARGET_CC=aarch64-linux-gnu-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-gnu; \
     fi && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
