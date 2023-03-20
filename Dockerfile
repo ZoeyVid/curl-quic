@@ -27,7 +27,7 @@ ARG CURL_VERSION=curl-8_0_1 \
 
 COPY --from=quiche-build /src/quiche /src/quiche
 RUN apt update && \
-    apt install --yes git build-essential autoconf automake libtool nghttp2-dev nghttp2-static && \
+    apt install --yes git build-essential autoconf automake libtool libnghttp2-dev && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
