@@ -1,6 +1,5 @@
 FROM --platform="$BUILDPLATFORM" rust:1.68.0-alpine3.17 as quiche-build
-ARG CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse \
-    QUICHE_VERSION=0.16.0 \
+ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
 RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
@@ -8,10 +7,10 @@ RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
     rustup target add x86_64-unknown-linux-musl && \
-    TARGET_CC=x86_64-alpine-linux-musl-gcc TARGET_AR=x86_64-alpine-linux-musl-gcc-ar cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl; \
+    TARGET_CC=x86_64-alpine-linux-musl-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
     rustup target add aarch64-unknown-linux-musl && \
-    TARGET_CC=aarch64-none-elf-gcc TARGET_AR=aarch64-none-elf-gcc-ar cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
+    TARGET_CC=aarch64-none-elf-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
     fi && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
