@@ -1,5 +1,6 @@
 FROM --platform="$BUILDPLATFORM" rust:1.68.0-alpine3.17 as quiche-build
-ARG QUICHE_VERSION=0.16.0 \
+ARG CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse \
+    QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
 RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
