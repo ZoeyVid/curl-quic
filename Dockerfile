@@ -9,12 +9,13 @@ RUN apt update && \
     if [ "$TARGETARCH" = "amd64" ]; then \
     apt install --yes crossbuild-essential-amd64 && \
     rustup target add x86_64-unknown-linux-musl && \
-    TARGET_CC=x86_64-linux-musl-gcc RUSTFLAGS="-C linker=x86_64-linux-musl-gcc" CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl &&\
+    TARGET_CC=x86_64-linux-musl-gcc RUSTFLAGS="-C linker=x86_64-linux-musl-gcc" CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/x86_64-unknown-linux-musl/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
     apt install --yes crossbuild-essential-arm64 && \
     rustup target add aarch64-unknown-linux-musl && \
+    TARGET_CC=aarch64-linux-musl-gcc RUSTFLAGS="-C linker=aarch64-linux-musl-gcc" CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/aarch64-unknown-linux-musl/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib; \
     fi
