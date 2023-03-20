@@ -21,12 +21,13 @@ RUN apt update && \
     fi
     
 
-FROM alpine:3.17.2 as curl-build
+FROM debian:testing-20230227-slim as curl-build
 ARG CURL_VERSION=curl-8_0_1 \
     TARGETARCH
 
 COPY --from=quiche-build /src/quiche /src/quiche
-RUN apk add --no-cache git build-base autoconf automake libtool nghttp2-dev nghttp2-static && \
+RUN apt update && \
+    apt install --yes git build-essential autoconf automake libtool nghttp2-dev nghttp2-static && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
