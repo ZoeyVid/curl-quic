@@ -2,13 +2,12 @@ FROM --platform="$BUILDPLATFORM" rust:1.68.0-alpine3.17 as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apk add --no-cache git && \
+RUN apk add --no-cache git gcc-cross-embedded && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
-    apk add --no-cache gcc-aarch64-none-elf && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
     fi && \
     mkdir quiche/deps/boringssl/src/lib && \
