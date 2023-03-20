@@ -2,7 +2,7 @@ FROM --platform="$BUILDPLATFORM" rust:1.68.0-alpine3.17 as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apk add --no-cache git gcc-cross-embedded && \
+RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
