@@ -23,7 +23,7 @@ FROM alpine:3.17.2 as curl-build
 ARG CURL_VERSION=curl-8_0_1
 
 COPY --from=quiche-build /src /src/quiche
-RUN apk add --no-cache git build-base autoconf nghttp2-dev nghttp2-static && \
+RUN apk add --no-cache git build-base autoconf automake nghttp2-dev nghttp2-static && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
