@@ -6,9 +6,9 @@ RUN apk add --no-cache git && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
-    CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl && \
+    CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-musl; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
-    CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl && \
+    CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
     fi && \
     mkdir quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
