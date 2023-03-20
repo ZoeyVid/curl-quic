@@ -6,11 +6,11 @@ RUN apt install --yes git cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
     if [ "$TARGETARCH" = "amd64" ]; then \
-    apt install -y crossbuild-essential-amd64 && \
+    apt install --yes crossbuild-essential-amd64 && \
     rustup target add x86_64-unknown-linux-gnu && \
     TARGET_CC=x86_64-linux-gnu-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target x86_64-unknown-linux-gnu; \
     elif [ "$TARGETARCH" = "arm64" ]; then \
-    apt install -y crossbuild-essential-arm64 && \
+    apt install --yes crossbuild-essential-arm64 && \
     rustup target add aarch64-unknown-linux-gnu && \
     TARGET_CC=aarch64-linux-gnu-gcc CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-gnu; \
     fi && \
