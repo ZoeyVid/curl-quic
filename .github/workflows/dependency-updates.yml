@@ -20,7 +20,7 @@ jobs:
               | tail -1 \
               | sed -E "s/\^\{\}//"
           )"
-          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION \\\|" ./Dockerfile
+          sed -i "s|QUICHE_VERSION=.*|QUICHE_VERSION=$QUICHE_VERSION \\\|" ./Dockerfile
           echo "version=$QUICHE_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
