@@ -22,7 +22,7 @@ RUN apt update && \
     
 
 FROM alpine:3.17.2 as curl-build
-ARG CURL_VERSION=curl-8_0_1 \
+ARG CURL_VERSION=curl-8_0_1
     TARGETARCH
 
 COPY --from=quiche-build /src /src/quiche
