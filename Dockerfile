@@ -2,7 +2,7 @@ FROM --platform="$BUILDPLATFORM" rust:1.68.0 as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apt update e&& \
+RUN apt update && \
     apt install --yes git cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src && \
     cd /src && \
