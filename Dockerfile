@@ -26,7 +26,7 @@ ARG CURL_VERSION=curl-8_0_1 \
     TARGETARCH
 
 COPY --from=quiche-build /src /src/quiche
-RUN apk add --no-cache git build-base autoconf automake libtool pkgconfig nghttp2-dev nghttp2-static && \
+RUN apk add --no-cache git build-base autoconf automake libtool nghttp2-dev nghttp2-static && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
