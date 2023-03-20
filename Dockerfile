@@ -13,7 +13,7 @@ RUN apk add --no-cache git build-base gcc-cross-embedded cmake && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog --target aarch64-unknown-linux-musl; \
     fi && \
     mkdir quiche/deps/boringssl/src/lib && \
-    ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
+    ln -vnf $(find target -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib
     
 
 FROM alpine:3.17.2 as curl-build
