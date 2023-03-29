@@ -1,8 +1,8 @@
-FROM --platform="$BUILDPLATFORM" rust:1.68.2-alpine3.17 as quiche-build
+FROM --platform="$BUILDPLATFORM" alpine:edge as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apk add --no-cache ca-certificates git build-base gcc-cross-embedded cmake && \
+RUN apk add --no-cache ca-certificates git build-base gcc-cross-embedded cmake cargo && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     mkdir -vp /src/quiche/quiche/deps/boringssl/src/lib && \
     cd /src/quiche && \
@@ -16,7 +16,7 @@ RUN apk add --no-cache ca-certificates git build-base gcc-cross-embedded cmake &
     ln -vnf $(find target/aarch64-unknown-linux-musl/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib; \
     fi
     
-FROM alpine:3.17.2 as curl-build
+FROM alpine:3.17.3 as curl-build
 ARG CURL_VERSION=curl-8_0_1 \
     TARGETARCH
 
@@ -35,7 +35,7 @@ RUN apk add --no-cache ca-certificates git build-base autoconf automake libtool 
     strip -s /src/curl/src/curl
 
 
-FROM alpine:3.17.2
+FROM alpine:3.17.3
 COPY --from=curl-build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
     curl --http3 -sIL https://cloudflare-quic.com && \
