@@ -1,8 +1,8 @@
-FROM --platform="$BUILDPLATFORM" alpine:edge as quiche-build
+FROM --platform="$BUILDPLATFORM" rust:1.68.2-alpine3.17 as quiche-build
 ARG QUICHE_VERSION=0.16.0 \
     TARGETARCH
 
-RUN apk add --no-cache ca-certificates git build-base gcc-cross-embedded cmake cargo rustup && \
+RUN apk add --no-cache ca-certificates git build-base gcc-cross-embedded cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     mkdir -vp /src/quiche/quiche/deps/boringssl/src/lib && \
     cd /src/quiche && \
