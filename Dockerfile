@@ -18,7 +18,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake li
     make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/release -static -all-static" && \
     strip -s /src/curl/src/curl
 
-FROM alpine:3.17.3
+FROM alpine:3.18.0
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
     curl --http3 -sIL https://cloudflare-quic.com && \
