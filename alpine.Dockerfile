@@ -2,7 +2,7 @@ FROM --platform="$BUILDPLATFORM" rust:1.69.0-alpine3.17 as quiche-build
 ARG QUICHE_VERSION=0.17.2 \
     TARGETARCH
 
-RUN sed -i "s|v3.17|v3.18|g" && \
+RUN sed -i "s|v3.17|v3.18|g" /etc/apk/repositories && \
     apk upgrade --no-cache && \
     apk add --no-cache ca-certificates git build-base gcc-cross-embedded cmake && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
