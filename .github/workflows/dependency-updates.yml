@@ -20,8 +20,8 @@ jobs:
               | tail -1 \
               | sed -E "s/\^\{\}//"
           )"
-          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION|" Dockerfile
-          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION \\\|" old.Dockerfile
+          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION \\\|" Dockerfile
+          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION|" old.Dockerfile
           sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION \\\|" alpine.Dockerfile
           echo "version=$QUICHE_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
@@ -48,8 +48,8 @@ jobs:
               | tail -1 \
               | sed -E "s/\^\{\}//"
           )"
-          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" Dockerfile
-          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION \\\|" old.Dockerfile
+          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION \\\|" Dockerfile
+          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" old.Dockerfile
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION \\\|" alpine.Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
