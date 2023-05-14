@@ -20,7 +20,7 @@ RUN apt update && \
     fi
     
 
-FROM debian:testing-20230227-slim as curl-build
+FROM debian:11.7-slim as curl-build
 ARG CURL_VERSION=curl-8_0_1 \
     TARGETARCH
 
