@@ -1,5 +1,5 @@
 FROM --platform="$BUILDPLATFORM" rust:1.69.0 as quiche-build
-ARG QUICHE_VERSION=0.17.2 \
+ARG QUICHE_VERSION=0.17.2
     TARGETARCH
 
 RUN apt update && \
