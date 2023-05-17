@@ -43,7 +43,7 @@ RUN apt update && \
 FROM alpine:3.18.0
 COPY --from=curl-build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
-#    curl --http3 -sIL https://cloudflare-quic.com && \
+    curl --http3 -sIL https://cloudflare-quic.com && \
     mkdir -vp /host
 
 WORKDIR /host
