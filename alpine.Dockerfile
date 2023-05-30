@@ -19,7 +19,7 @@ RUN sed -i "s|v3.17|v3.18|g" /etc/apk/repositories && \
     fi
     
 FROM alpine:3.18.0 as curl-build
-ARG CURL_VERSION=curl-8_1_1 \
+ARG CURL_VERSION=curl-8_1_2 \
     TARGETARCH
 
 COPY --from=quiche-build /src/quiche /src/quiche
