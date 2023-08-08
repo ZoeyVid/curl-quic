@@ -40,7 +40,7 @@ RUN apt update && \
     strip -s /src/curl/src/curl
 
 
-FROM alpine:3.18.2
+FROM alpine:3.18.3
 COPY --from=curl-build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
     curl --http3 -sIL https://cloudflare-quic.com && \
