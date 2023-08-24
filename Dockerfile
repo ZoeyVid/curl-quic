@@ -3,13 +3,12 @@ FROM rust:1.71.1-alpine3.18 as build
 ARG QUICHE_VERSION=0.18.0
 ARG CURL_VERSION=curl-8_2_1
 
+WORKDIR /src
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static && \
-    mkdir /src &&\
-    cd /src && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
-    mkdir -vp /src/quiche/quiche/deps/boringssl/src/lib && \
     cd /src/quiche && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
+    mkdir -vp /src/quiche/quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
@@ -21,7 +20,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake li
 FROM alpine:3.18.3
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
-    curl --http3 -sIL https://cloudflare-quic.com && \
+    curl --http3-only -sIL https://quic.nginx.org && \
     mkdir -vp /host
 
 WORKDIR /host
