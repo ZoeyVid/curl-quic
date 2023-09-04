@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read version
         id: version
         run: echo "version=$(echo $(cat Dockerfile | grep -wE "ARG CURL_VERSION=*" | sed "s|ARG CURL_VERSION=||g" | sed "s| \\\||g" | sed "s|_|\.|g")-quiche-$(cat Dockerfile | grep -wE "ARG QUICHE_VERSION=*" | sed "s|ARG QUICHE_VERSION=||g" | sed "s| \\\||g"))" >> $GITHUB_OUTPUT
