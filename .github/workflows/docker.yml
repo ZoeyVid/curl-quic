@@ -21,7 +21,7 @@ jobs:
         id: version
         run: echo "version=$(echo $(cat Dockerfile | grep -wE "ARG CURL_VERSION=*" | sed "s|ARG CURL_VERSION=||g" | sed "s| \\\||g" | sed "s|_|\.|g")-quiche-$(cat Dockerfile | grep -wE "ARG QUICHE_VERSION=*" | sed "s|ARG QUICHE_VERSION=||g" | sed "s| \\\||g"))" >> $GITHUB_OUTPUT
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64 #all
       - name: Set up Docker Buildx
