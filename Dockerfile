@@ -1,4 +1,4 @@
-FROM rust:1.72.0-alpine3.18 as build
+FROM rust:1.72.1-alpine3.18 as build
 
 ARG QUICHE_VERSION=0.18.0
 ARG CURL_VERSION=curl-8_3_0
