@@ -1,4 +1,4 @@
-FROM --platform="$BUILDPLATFORM" rust:1.72.0-alpine3.17 as quiche-build
+FROM --platform="$BUILDPLATFORM" rust:1.72.1-alpine3.17 as quiche-build
 ARG QUICHE_VERSION=0.18.0 \
     TARGETARCH
 
