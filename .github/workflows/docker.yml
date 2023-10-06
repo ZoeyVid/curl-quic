@@ -76,7 +76,7 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         if: ${{ github.ref == 'refs/heads/develop' }}
         with:
-          prerelease: true
+          prerelease: false
           repo_token: ${{ github.token }}
           title: ${{ steps.version.outputs.version }}
           automatic_release_tag: ${{ steps.version.outputs.version }}
