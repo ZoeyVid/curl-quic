@@ -1,8 +1,6 @@
 name: Build Docker Image
 on:
   push:
-    branches:
-      - latest
     paths:
       - Dockerfile
       - .github/workflows/docker.yml
@@ -50,31 +48,31 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64 #,linux/amd64/v2,linux/amd64/v3,linux/amd64/v4,linux/ppc64le,linux/s390x,linux/386,linux/arm/v7,linux/arm/v6
-          push: ${{ github.ref == 'refs/heads/develop' }}
+          push: ${{ github.ref == 'refs/heads/latest' }}
           tags: |
             ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
             ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
       - name: show version
-        if: ${{ github.ref == 'refs/heads/develop' }}
+        if: ${{ github.ref == 'refs/heads/latest' }}
         run: |
           docker run --rm ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
           docker run --rm ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }} -V
       - name: copy curl binary
-        if: ${{ github.ref == 'refs/heads/develop' }}
+        if: ${{ github.ref == 'refs/heads/latest' }}
         run: |
           docker run -d --pull always --platform amd64 --name curl-x86_64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
           docker run -d --pull always --platform arm64 --name curl-aarch64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
       - uses: actions/upload-artifact@v3
-        if: ${{ github.ref == 'refs/heads/develop' }}
+        if: ${{ github.ref == 'refs/heads/latest' }}
         with:
           name: artifacts
           path: |
             curl-x86_64
             curl-aarch64
       - uses: "marvinpinto/action-automatic-releases@latest"
-        if: ${{ github.ref == 'refs/heads/develop' }}
+        if: ${{ github.ref == 'refs/heads/latest' }}
         with:
           prerelease: false
           repo_token: ${{ github.token }}
