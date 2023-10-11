@@ -1,7 +1,7 @@
 FROM rust:1.73.0-alpine3.18 as build
 
 ARG QUICHE_VERSION=0.18.0
-ARG CURL_VERSION=curl-8_3_0
+ARG CURL_VERSION=curl-8_4_0
 
 WORKDIR /src
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static && \

@@ -21,7 +21,7 @@ RUN apt update && \
     
 
 FROM debian:12.1-slim as curl-build
-ARG CURL_VERSION=curl-8_3_0 \
+ARG CURL_VERSION=curl-8_4_0 \
     TARGETARCH
 
 COPY --from=quiche-build /src/quiche /src/quiche
