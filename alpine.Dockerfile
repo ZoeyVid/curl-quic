@@ -1,5 +1,5 @@
 FROM --platform="$BUILDPLATFORM" rust:1.73.0-alpine3.17 as quiche-build
-ARG QUICHE_VERSION=0.18.0 \
+ARG QUICHE_VERSION=0.19.0 \
     TARGETARCH
 
 RUN sed -i "s|v3.17|v3.18|g" /etc/apk/repositories && \
