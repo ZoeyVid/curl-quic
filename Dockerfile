@@ -4,7 +4,7 @@ ARG QUICHE_VERSION=0.19.0
 ARG CURL_VERSION=curl-8_4_0
 
 WORKDIR /src
-RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static && \
+RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool libssh2-dev libssh2-static nghttp2-dev nghttp2-static zlib-lib zlib-static brotli-dev brotli-static zstd-dev zstd-static && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
@@ -20,7 +20,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake li
 FROM alpine:3.18.4
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
-    curl --http3-only -sIL https://quic.nginx.org && \
+    curl --compressed --http3-only -sIL https://quic.nginx.org && \
     mkdir -vp /host
 
 WORKDIR /host
