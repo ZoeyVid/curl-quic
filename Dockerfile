@@ -4,7 +4,7 @@ ARG QUICHE_VERSION=0.19.0
 ARG CURL_VERSION=curl-8_4_0
 
 WORKDIR /src
-RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool libssh2-dev libssh2-static nghttp2-dev nghttp2-static zlib-dev zlib-static && \
+RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
@@ -13,7 +13,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake li
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
-    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --with-libssh2 --disable-shared --enable-static && \
+    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --disable-shared --enable-static && \
     make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/release -static -all-static" && \
     strip -s /src/curl/src/curl
 
