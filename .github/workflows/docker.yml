@@ -64,7 +64,7 @@ jobs:
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
           docker run -d --pull always --platform arm64 --name curl-aarch64 ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ github.ref == 'refs/heads/latest' }}
         with:
           name: artifacts
