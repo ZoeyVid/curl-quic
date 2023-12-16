@@ -11,7 +11,7 @@ RUN sed -i "s|v3.18|v3.19|g" /etc/apk/repositories && \
     sync
 
 WORKDIR /src
-RUN apk add --no-cache ca-certificates git build-base cmake autoconf nghttp2-dev nghttp2-static ngtcp2-dev nghttp3-dev zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
+RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake nghttp2-dev nghttp2-static ngtcp2-dev nghttp3-dev zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src && \
     autoreconf -fi && \
     ./configure --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --enable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
