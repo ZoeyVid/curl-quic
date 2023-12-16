@@ -3,11 +3,17 @@ FROM rust:1.74.1-alpine3.18 as build
 ARG QUICHE_VERSION=0.20.0
 ARG CURL_VERSION=curl-8_5_0
 
-WORKDIR /src
+ARG CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
+
+RUN sed -i "s|v3.18|v3.19|g" /etc/apk/repositories && \
+    apk add --no-cache --upgrade apk-tools && \
+    apk upgrade --available && \
+    sync
+
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
     cd /src/quiche && \
-    CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
+    cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
     mkdir -vp /src/quiche/quiche/deps/boringssl/src/lib && \
     ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib && \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
