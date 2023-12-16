@@ -10,21 +10,16 @@ RUN sed -i "s|v3.18|v3.19|g" /etc/apk/repositories && \
     apk upgrade --available && \
     sync
 
-RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
-    git clone --recursive --branch "$QUICHE_VERSION" https://github.com/cloudflare/quiche /src/quiche && \
-    cd /src/quiche && \
-    cargo build --package quiche --release --features ffi,pkg-config-meta,qlog && \
-    mkdir -vp /src/quiche/quiche/deps/boringssl/src/lib && \
-    ln -vnf $(find target/release -name libcrypto.a -o -name libssl.a) quiche/deps/boringssl/src/lib && \
-    git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
-    cd /src/curl && \
+WORKDIR /src
+RUN apk add --no-cache ca-certificates git build-base cmake autoconf nghttp2-dev nghttp2-static ngtcp2-dev nghttp3-dev zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
+    git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src && \
     autoreconf -fi && \
-    ./configure LDFLAGS="-Wl,-rpath,/src/quiche/target/release -static" PKG_CONFIG="pkg-config --static" --with-openssl=/src/quiche/quiche/deps/boringssl/src --with-quiche=/src/quiche/target/release --with-nghttp2 --enable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
-    make -j "$(nproc)" LDFLAGS="-Wl,-rpath,/src/quiche/target/release -L/src/quiche/quiche/deps/boringssl/src/lib -L/src/quiche/target/release -static -all-static" && \
-    strip -s /src/curl/src/curl
+    ./configure --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --enable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
+    make -j "$(nproc)" && \
+    strip -s /src/src/curl
 
 FROM alpine:3.19.0
-COPY --from=build /src/curl/src/curl /usr/local/bin/curl
+COPY --from=build /src/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
     curl --compressed --http3-only -sIL https://quic.nginx.org && \
     mkdir -vp /host
