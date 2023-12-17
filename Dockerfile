@@ -3,7 +3,7 @@ FROM alpine:3.19.0 as build
 ARG CURL_VERSION=curl-8_5_0
 ARG OS_VERSION=openssl-3.1.4+quic
 
-RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static ngtcp2-dev nghttp3-dev zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
+RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool linux-headers nghttp2-dev nghttp2-static ngtcp2-dev nghttp3-dev zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
     \
     git clone --recursive --branch "$OS_VERSION" https://github.com/quictls/openssl /src/openssl && \
     cd /src/openssl && \
