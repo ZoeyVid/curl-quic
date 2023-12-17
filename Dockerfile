@@ -9,7 +9,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
-    /src/wolfssl/configure --prefix=/usr --enable-curl --disable-oldtls --enable-quic --enable-earlydata --enable-ech --disable-shared --enable-static && \
+    /src/wolfssl/configure --prefix=/usr --enable-curl --disable-oldtls --enable-quic --enable-ech --disable-shared --enable-psk --enable-session-ticket --enable-earlydata --enable-static && \
     make && \
     make install && \
     \
