@@ -9,21 +9,21 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
-    /src/wolfssl/configure --prefix=/usr --enable-curl --enable-quic && \
+    /src/wolfssl/configure --prefix=/usr --enable-curl --disable-oldtls --enable-quic --enable-earlydata --enable-ech --disable-shared --enable-static && \
     make && \
     make install && \
     \
     git clone --recursive https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
-    /src/nghttp3/configure --prefix=/usr --enable-lib-only && \
+    /src/nghttp3/configure --prefix=/usr --enable-lib-only --disable-shared --enable-static && \
     make && \
     make install && \
     \
     git clone --recursive https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
-    /src/ngtcp2/configure --prefix=/usr --enable-lib-only --with-wolfssl && \
+    /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --disable-shared --enable-static && \
     make && \
     make install && \
     \
