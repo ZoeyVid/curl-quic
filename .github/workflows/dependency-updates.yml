@@ -14,7 +14,7 @@ jobs:
         id: update
         run: |
           WS_VERSION="$(
-          git ls-remote --tags https://github.com/wolfSSL/wolfssl \
+          git ls-remote --tags https://github.com/wolfSSL/wolfssl v*.*.*-stable \
               | cut -d/ -f3 \
               | sort -V \
               | tail -1 \
