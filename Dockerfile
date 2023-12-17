@@ -11,7 +11,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake li
     
     \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
-    cd /src/curl
+    cd /src/curl && \
     autoreconf -fi && \
     /src/curl/configure --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --disable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
     make -j "$(nproc)" && \
