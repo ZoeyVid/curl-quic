@@ -2,7 +2,7 @@ FROM alpine:3.19.0 as build
 
 ARG CURL_VERSION=curl-8_5_0
 ARG WS_VERSION=v5.6.4-stable
-ARG NGH3_VERSION=v1.1.0b
+ARG NGH3_VERSION=v1.1.0
 ARG NT2_VERSION=v1.1.0a
 
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
