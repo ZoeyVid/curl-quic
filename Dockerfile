@@ -4,7 +4,7 @@ ARG CURL_VERSION=curl-8_5_0
 ARG WS_VERSION=v5.6.4-stable
 
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
-                       nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static libssh2-dev libssh2-static && \
+                       nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static libssh2-dev libssh2-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
     cd /src/wolfssl && \
@@ -26,6 +26,11 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --disable-shared --enable-static && \
     make && \
     make install && \
+    \
+    git clone --recursive https://github.com/google/brotli /src/brotli && \
+    cd /src/brotli && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF /src/brotli && \
+    cmake --build /src/brotli --config Release --target install && \
     \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
     cd /src/curl && \
