@@ -6,6 +6,7 @@ ARG WS_VERSION=v5.6.4-stable
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake libtool nghttp2-dev nghttp2-static ngtcp2-dev nghttp3-dev zlib-dev zlib-static zstd-dev zstd-static brotli-dev brotli-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
+    cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
     /src/wolfssl/configure --prefix=/usr --enable-curl && \
     
