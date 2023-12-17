@@ -15,14 +15,14 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     git clone --recursive https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
-    /src/nghttp3/configure --prefix=/usr --enable-lib-only --with-wolfssl && \
+    /src/nghttp3/configure --prefix=/usr --enable-lib-only && \
     make && \
     make install && \
     \
     git clone --recursive https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
-    /src/ngtcp2/configure --prefix=/usr --enable-lib-only && \
+    /src/ngtcp2/configure --prefix=/usr --enable-lib-only --with-wolfssl && \
     make && \
     make install && \
     \
