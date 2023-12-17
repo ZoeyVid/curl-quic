@@ -9,6 +9,8 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
     /src/wolfssl/configure --prefix=/usr --enable-curl && \
+    make && \
+    make install && \
     
     \
     git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
