@@ -5,34 +5,32 @@ on:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 jobs:
-  quiche-update:
+  wolfssl-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: update quiche version
+      - name: update wolfssl version
         id: update
         run: |
-          QUICHE_VERSION="$(
-          git ls-remote --tags https://github.com/cloudflare/quiche \
+          WS_VERSION="$(
+          git ls-remote --tags https://github.com/wolfSSL/wolfssl \
               | cut -d/ -f3 \
               | sort -V \
               | tail -1 \
               | sed -E "s/\^\{\}//"
           )"
-          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION|" Dockerfile
-          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION \\\|" alpine.Dockerfile
-          sed -i "s|ARG QUICHE_VERSION=.*|ARG QUICHE_VERSION=$QUICHE_VERSION \\\|" debian.Dockerfile
-          echo "version=$QUICHE_VERSION" >> $GITHUB_OUTPUT
+          sed -i "s|ARG WS_VERSION=.*|ARG WS_VERSION=$WS_VERSION|" Dockerfile
+          echo "version=$WS_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           signoff: true
           delete-branch: true
-          commit-message: update quiche version to ${{ steps.update.outputs.version }}
-          branch: update-quiche-version
-          title: update quiche version to ${{ steps.update.outputs.version }}
-          body: update quiche version to ${{ steps.update.outputs.version }}
+          commit-message: update wolfssl version to ${{ steps.update.outputs.version }}
+          branch: update-wolfssl-version
+          title: update wolfssl version to ${{ steps.update.outputs.version }}
+          body: update wolfssl version to ${{ steps.update.outputs.version }}
   curl-update:
     runs-on: ubuntu-latest
     steps:
@@ -49,8 +47,6 @@ jobs:
               | sed -E "s/\^\{\}//"
           )"
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" Dockerfile
-          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION \\\|" alpine.Dockerfile
-          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION \\\|" debian.Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
