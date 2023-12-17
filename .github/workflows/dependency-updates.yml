@@ -31,7 +31,6 @@ jobs:
           branch: update-wolfssl-version
           title: update wolfssl version to ${{ steps.update.outputs.version }}
           body: update wolfssl version to ${{ steps.update.outputs.version }}
-jobs:
   nghttp3-update:
     runs-on: ubuntu-latest
     steps:
@@ -58,7 +57,6 @@ jobs:
           branch: update-nghttp3-version
           title: update nghttp3 version to ${{ steps.update.outputs.version }}
           body: update nghttp3 version to ${{ steps.update.outputs.version }}
-jobs:
   ngtcp2-update:
     runs-on: ubuntu-latest
     steps:
