@@ -3,7 +3,7 @@ FROM alpine:3.19.0 as build
 ARG CURL_VERSION=8.5.0
 ARG WS_VERSION=v5.6.4-stable
 ARG NGH3_VERSION=v1.1.0
-ARG NT2_VERSION=v1.1.0
+ARG NGTCP2_VERSION=v1.1.0
 
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
                        nghttp2-dev nghttp2-static zlib-dev zlib-static && \
@@ -22,7 +22,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     make && \
     make install && \
     \
-    git clone --recursive --branch "$NT2_VERSION" https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
+    git clone --recursive --branch "$NGTCP2_VERSION" https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
     /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --disable-shared --enable-static && \
