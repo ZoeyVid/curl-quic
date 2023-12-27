@@ -12,22 +12,22 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
     /src/wolfssl/configure --prefix=/usr --enable-curl --disable-oldtls --enable-quic --enable-ech --enable-psk --enable-session-ticket --enable-earlydata --disable-shared --enable-static && \
-    make && \
-    make install && \
+    make -j "$(nproc)" && \
+    make -j "$(nproc)" install && \
     \
     git clone --recursive --branch "$NGH3_VERSION" https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
     /src/nghttp3/configure --prefix=/usr --enable-lib-only --disable-shared --enable-static && \
-    make && \
-    make install && \
+    make -j "$(nproc)" && \
+    make -j "$(nproc)" install && \
     \
     git clone --recursive --branch "$NGTCP2_VERSION" https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
     /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --disable-shared --enable-static && \
-    make && \
-    make install && \
+    make -j "$(nproc)" && \
+    make -j "$(nproc)" install && \
     \
     mkdir /src/curl && \
     wget "https://curl.se/download/curl-$CURL_VERSION.tar.gz" -O - | tar xz -C /src/curl --strip-components=1 && \
