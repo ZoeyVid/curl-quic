@@ -51,7 +51,9 @@ jobs:
           push: ${{ github.ref == 'refs/heads/latest' }}
           tags: |
             ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+            ${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.run_number }}
             ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+            ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ github.run_number }}
       - name: show version
         if: ${{ github.ref == 'refs/heads/latest' }}
         run: |
