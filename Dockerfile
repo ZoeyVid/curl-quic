@@ -1,4 +1,4 @@
-FROM alpine:3.19.0 as build
+FROM alpine:3.19.1 as build
 
 ARG CURL_VERSION=8.5.0
 ARG WS_VERSION=v5.6.6-stable
@@ -37,7 +37,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     make -j "$(nproc)" LDFLAGS="-static -all-static" && \
     strip -s /src/curl/src/curl
 
-FROM alpine:3.19.0
+FROM alpine:3.19.1
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk add --no-cache ca-certificates tzdata && \
     curl -V && \
