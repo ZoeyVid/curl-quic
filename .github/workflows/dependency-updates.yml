@@ -23,7 +23,7 @@ jobs:
           sed -i "s|ARG WS_VERSION=.*|ARG WS_VERSION=$WS_VERSION|" Dockerfile
           echo "version=$WS_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           signoff: true
           delete-branch: true
@@ -49,7 +49,7 @@ jobs:
           sed -i "s|ARG NGH3_VERSION=.*|ARG NGH3_VERSION=$NGH3_VERSION|" Dockerfile
           echo "version=$NGH3_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           signoff: true
           delete-branch: true
@@ -75,7 +75,7 @@ jobs:
           sed -i "s|ARG NGTCP2_VERSION=.*|ARG NGTCP2_VERSION=$NGTCP2_VERSION|" Dockerfile
           echo "version=$NGTCP2_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           signoff: true
           delete-branch: true
@@ -103,7 +103,7 @@ jobs:
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           signoff: true
           delete-branch: true
