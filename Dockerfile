@@ -6,7 +6,7 @@ ARG NGH3_VERSION=v1.1.0
 ARG NGTCP2_VERSION=v1.2.0
 
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
-                       nghttp2-dev nghttp2-static zlib-dev zlib-static libpsl-dev libpsl-static && \
+                       nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
     cd /src/wolfssl && \
@@ -33,7 +33,7 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
     wget "https://curl.se/download/curl-$CURL_VERSION.tar.gz" -O - | tar xz -C /src/curl --strip-components=1 && \
     cd /src/curl && \
     autoreconf -fi && \
-    /src/curl/configure LDFLAGS="-static" PKG_CONFIG="pkg-config --static" --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --disable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
+    /src/curl/configure LDFLAGS="-static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --disable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
     make -j "$(nproc)" LDFLAGS="-static -all-static" && \
     strip -s /src/curl/src/curl
 
