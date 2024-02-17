@@ -73,7 +73,7 @@ jobs:
           path: |
             curl-x86_64
             curl-aarch64
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - uses: crowbarmaster/GH-Automatic-Releases@latest
         if: ${{ github.ref == 'refs/heads/latest' }}
         with:
           prerelease: false
