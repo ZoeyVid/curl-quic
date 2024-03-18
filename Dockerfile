@@ -3,7 +3,7 @@ FROM alpine:3.19.1 as build
 ARG CURL_VERSION=8.6.0
 ARG WS_VERSION=v5.6.6-stable
 ARG NGH3_VERSION=v1.2.0
-ARG NGTCP2_VERSION=v1.3.0
+ARG NGTCP2_VERSION=v1.4.0
 
 RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
                        nghttp2-dev nghttp2-static zlib-dev zlib-static && \
