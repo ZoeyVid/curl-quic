@@ -5,7 +5,8 @@ ARG WS_VERSION=v5.7.0-stable
 ARG NGH3_VERSION=v1.2.0
 ARG NGTCP2_VERSION=v1.4.0
 
-RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
+RUN apk upgrade --no-cache -a && \
+    apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool \
                        nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
@@ -39,7 +40,8 @@ RUN apk add --no-cache ca-certificates git build-base cmake autoconf automake co
 
 FROM alpine:3.19.1
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
-RUN apk add --no-cache ca-certificates tzdata && \
+RUN apk upgrade --no-cache -a && \
+    apk add --no-cache ca-certificates tzdata && \
     curl -V && \
     curl --compressed --http3-only -sIL https://quic.nginx.org && \
     mkdir -vp /host
