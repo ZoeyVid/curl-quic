@@ -30,8 +30,8 @@ RUN apk upgrade --no-cache -a && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
-    mkdir /src/curl && \
-    wget "https://curl.se/download/curl-$CURL_VERSION.tar.gz" -O - | tar xz -C /src/curl --strip-components=1 && \
+    wget "https://curl.se/download/curl-$CURL_VERSION.tar.gz" -O - | tar xz -C /src && \
+    mv -v /src/curl-"$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
     /src/curl/configure LDFLAGS="-static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --disable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
