@@ -1,6 +1,8 @@
 name: dependency-updates
 on:
   push:
+    branches:
+      - develop
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
@@ -17,8 +19,7 @@ jobs:
           git ls-remote --tags https://github.com/wolfSSL/wolfssl v*.*.*-stable \
               | cut -d/ -f3 \
               | sort -V \
-              | tail -1 \
-              | sed -E "s/\^\{\}//"
+              | tail -1
           )"
           sed -i "s|ARG WS_VERSION=.*|ARG WS_VERSION=$WS_VERSION|" Dockerfile
           echo "version=$WS_VERSION" >> $GITHUB_OUTPUT
@@ -44,7 +45,7 @@ jobs:
               | cut -d/ -f3 \
               | sort -V \
               | tail -1 \
-              | sed -E "s/\^\{\}//"
+              | sed "s|\^{}||g"
           )"
           sed -i "s|ARG NGH3_VERSION=.*|ARG NGH3_VERSION=$NGH3_VERSION|" Dockerfile
           echo "version=$NGH3_VERSION" >> $GITHUB_OUTPUT
@@ -70,7 +71,7 @@ jobs:
               | cut -d/ -f3 \
               | sort -V \
               | tail -1 \
-              | sed -E "s/\^\{\}//"
+              | sed "s|\^{}||g"
           )"
           sed -i "s|ARG NGTCP2_VERSION=.*|ARG NGTCP2_VERSION=$NGTCP2_VERSION|" Dockerfile
           echo "version=$NGTCP2_VERSION" >> $GITHUB_OUTPUT
@@ -96,7 +97,7 @@ jobs:
               | cut -d/ -f3 \
               | sort -V \
               | tail -1 \
-              | sed -E "s/\^\{\}//" \
+              | sed "s|\^{}||g" \
               | sed "s|curl-||g" \
               | sed "s|_|\.|g"
           )"
