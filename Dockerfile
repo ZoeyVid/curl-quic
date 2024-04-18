@@ -1,5 +1,5 @@
 FROM alpine:3.19.1 as build
-
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=8.7.1
 ARG WS_VERSION=v5.7.0-stable
 ARG NGH3_VERSION=v1.2.0
@@ -30,7 +30,7 @@ RUN apk upgrade --no-cache -a && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
-    wget "https://curl.se/download/curl-$CURL_VERSION.tar.gz" -O - | tar xz -C /src && \
+    wget -q "https://curl.se/download/curl-$CURL_VERSION.tar.gz" -O - | tar xz -C /src && \
     mv -v /src/curl-"$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     autoreconf -fi && \
