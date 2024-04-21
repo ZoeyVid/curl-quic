@@ -1,5 +1,7 @@
 # curl-quic
 
+This docker image contains/the release files are a statically linked build of curl based on wolfssl, zlib, nghttp2, ngtcp2 and nghttp3.
+
 ## Usage:
 
 ```sh
