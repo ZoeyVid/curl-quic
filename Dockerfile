@@ -42,11 +42,11 @@ RUN apk upgrade --no-cache -a && \
 FROM alpine:3.19.1
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk upgrade --no-cache -a && \
-    apk add --no-cache ca-certificates tzdata && \
+    apk add --no-cache ca-certificates tzdata tini && \
     curl -V && \
     curl --compressed --http3-only -sIL https://quic.nginx.org && \
     mkdir -vp /host
 
 WORKDIR /host
-ENTRYPOINT ["curl"]
+ENTRYPOINT ["tini", "--", "curl"]
 CMD ["-V"]
