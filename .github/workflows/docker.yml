@@ -99,6 +99,20 @@ jobs:
       - name: show version (PR)
         if: ${{ github.event_name == 'pull_request' }}
         run: docker run --rm ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }} -V
+      - name: copy curl binary (PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          docker run -d --pull always --platform amd64 --name curl-x86_64 ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }}
+          docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
+          docker run -d --pull always --platform arm64 --name curl-aarch64 ghcr.io/${{ steps.un.outputs.un }}/${{ github.event.repository.name }}:${{ steps.pr.outputs.pr }}
+          docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
+      - uses: actions/upload-artifact@v4
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          name: artifacts
+          path: |
+            curl-x86_64
+            curl-aarch64
       - name: add comment (PR)
         uses: mshick/add-pr-comment@v2
         if: ${{ github.event_name == 'pull_request' }}
