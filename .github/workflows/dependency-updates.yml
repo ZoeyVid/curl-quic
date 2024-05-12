@@ -2,7 +2,7 @@ name: dependency-updates
 on:
   push:
     branches:
-      - develop
+      - latest
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
