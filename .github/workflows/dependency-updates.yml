@@ -97,9 +97,7 @@ jobs:
               | cut -d/ -f3 \
               | sort -V \
               | tail -1 \
-              | sed "s|\^{}||g" \
-              | sed "s|curl-||g" \
-              | sed "s|_|\.|g"
+              | sed "s|\^{}||g"
           )"
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
