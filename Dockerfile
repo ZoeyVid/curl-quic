@@ -10,17 +10,10 @@ RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool linux-headers \
                        nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     \
-#    git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
-#    cd /src/wolfssl && \
-#    /src/wolfssl/autogen.sh && \
-#    /src/wolfssl/configure CFLAGS="-DWOLFSSL_NO_ASN_STRICT" --prefix=/usr/local --enable-curl --disable-oldtls --enable-quic --enable-ech --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --disable-shared --enable-static && \
-#    make -j "$(nproc)" && \
-#    make -j "$(nproc)" install && \
-    \
-    git clone --recursive --branch 3.8.8 https://gitlab.com/gnutls/gnutls /src/gnutls && \
-    cd /src/gnutls && \
-    /src/gnutls/bootstrap && \
-    /src/gnutls/configure --prefix=/usr/local --disable-shared --enable-static && \
+    git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
+    cd /src/wolfssl && \
+    /src/wolfssl/autogen.sh && \
+    /src/wolfssl/configure CFLAGS="-DWOLFSSL_NO_ASN_STRICT" --prefix=/usr/local --enable-curl --disable-oldtls --enable-quic --enable-ech --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
