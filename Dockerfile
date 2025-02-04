@@ -8,7 +8,7 @@ ARG NGTCP2_VERSION=v1.10.0
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool linux-headers \
-                       nghttp2-dev nghttp2-static zlib-dev zlib-static libpsl-dev libpsl-static && \
+                       nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
     cd /src/wolfssl && \
@@ -35,7 +35,7 @@ RUN apk upgrade --no-cache -a && \
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
-    /src/curl/configure LDFLAGS="-static" PKG_CONFIG="pkg-config --static" --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --disable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
+    /src/curl/configure LDFLAGS="-static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --disable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
     make -j "$(nproc)" LDFLAGS="-static -all-static" && \
     strip -s /src/curl/src/curl
 
