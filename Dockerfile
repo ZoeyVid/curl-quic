@@ -8,7 +8,7 @@ ARG NGTCP2_VERSION=v1.10.0
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool linux-headers \
-                       nghttp2-dev nghttp2-static zlib-dev zlib-static && \
+                       nghttp2-dev nghttp2-static zlib-dev zlib-static libpsl-dev libpsl-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
     cd /src/wolfssl && \
