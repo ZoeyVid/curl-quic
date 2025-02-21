@@ -4,7 +4,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_12_1
 ARG WS_VERSION=v5.7.6-stable
 ARG NGH3_VERSION=v1.8.0
-ARG NGTCP2_VERSION=v1.10.0
+ARG NGTCP2_VERSION=v1.11.0
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool linux-headers \
