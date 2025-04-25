@@ -2,7 +2,7 @@
 FROM alpine:3.21.3 AS build
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_13_0
-ARG WS_VERSION=v5.7.6-stable
+ARG WS_VERSION=v5.8.0-stable
 ARG NGH3_VERSION=v1.9.0
 ARG NGTCP2_VERSION=v1.12.0
 
