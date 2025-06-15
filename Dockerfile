@@ -7,7 +7,7 @@ ARG NGH3_VERSION=v1.10.1
 ARG NGTCP2_VERSION=v1.13.0
 
 RUN apk upgrade --no-cache -a && \
-    apk add --no-cache ca-certificates git build-base cmake autoconf automake coreutils libtool linux-headers \
+    apk add --no-cache ca-certificates git build-base autoconf automake coreutils libtool linux-headers \
                        nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     \
     git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
