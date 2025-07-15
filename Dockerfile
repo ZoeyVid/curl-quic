@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:labs
-FROM alpine:3.22.0 AS build
+FROM alpine:3.22.1 AS build
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_14_1
 ARG WS_VERSION=v5.8.0-stable
@@ -39,7 +39,7 @@ RUN apk upgrade --no-cache -a && \
     make -j "$(nproc)" LDFLAGS="-static -all-static" && \
     strip -s /src/curl/src/curl
 
-FROM alpine:3.22.0
+FROM alpine:3.22.1
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates tzdata tini && \
