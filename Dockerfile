@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:labs
 FROM alpine:3.22.0 AS build
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-ARG CURL_VERSION=curl-8_14_1
+ARG CURL_VERSION=curl-8_15_0
 ARG WS_VERSION=v5.8.0-stable
 ARG NGH3_VERSION=v1.10.1
 ARG NGTCP2_VERSION=v1.13.0
