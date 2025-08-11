@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Read version
         id: version
         run: echo "version=$(echo $(cat Dockerfile | grep "^ARG CURL_VERSION=.*$" | sed "s|ARG CURL_VERSION=||g" | sed "s|_|\.|g")-wolfssl-$(cat Dockerfile | grep "^ARG WS_VERSION=.*$" | sed "s|ARG WS_VERSION=v\([0-9.]\+\).*|\1|g")-nghttp3-$(cat Dockerfile | grep "^ARG NGH3_VERSION=.*$" | sed "s|ARG NGH3_VERSION=v||g")-ngtcp2-$(cat Dockerfile | grep "^ARG NGTCP2_VERSION=.*$" | sed "s|ARG NGTCP2_VERSION=v||g"))" >> $GITHUB_OUTPUT
