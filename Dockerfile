@@ -44,7 +44,7 @@ COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates tzdata tini && \
     curl -V && \
-    curl --compressed --http3-only -sIL https://quic.nginx.org && \
+#    curl --compressed --http3-only -sIL https://quic.nginx.org && \
     mkdir -vp /host
 
 WORKDIR /host
