@@ -3,7 +3,7 @@ FROM alpine:3.22.1 AS build
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_16_0
 ARG WS_VERSION=v5.8.2-stable
-ARG NGH3_VERSION=v1.11.0
+ARG NGH3_VERSION=v1.12.0
 ARG NGTCP2_VERSION=v1.15.1
 
 RUN apk upgrade --no-cache -a && \
