@@ -17,7 +17,7 @@ RUN apk upgrade --no-cache -a && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
-    git clone --depth 1 https://github.com/ngtcp2/nghttp3 --branch "$NGH3_VERSION" /src/nghttp3 && \
+    git clone --depth 1 --shallow-submodules --recurse-submodules https://github.com/ngtcp2/nghttp3 --branch "$NGH3_VERSION" /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
     /src/nghttp3/configure --prefix=/usr/local --enable-lib-only --disable-shared --enable-static && \
