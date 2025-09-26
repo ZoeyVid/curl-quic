@@ -10,28 +10,28 @@ RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates git build-base autoconf automake coreutils libtool linux-headers \
                        nghttp2-dev nghttp2-static zlib-dev zlib-static && \
     \
-    git clone --recursive --branch "$WS_VERSION" https://github.com/wolfSSL/wolfssl /src/wolfssl && \
+    git clone --depth 1 https://github.com/wolfSSL/wolfssl --branch "$WS_VERSION" /src/wolfssl && \
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
     /src/wolfssl/configure CFLAGS="-DWOLFSSL_NO_ASN_STRICT" --prefix=/usr/local --enable-curl --disable-oldtls --enable-ech --enable-opensslextra --enable-quic --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
-    git clone --recursive --branch "$NGH3_VERSION" https://github.com/ngtcp2/nghttp3 /src/nghttp3 && \
+    git clone --depth 1 https://github.com/ngtcp2/nghttp3 --branch "$NGH3_VERSION" /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
     /src/nghttp3/configure --prefix=/usr/local --enable-lib-only --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
-    git clone --recursive --branch "$NGTCP2_VERSION" https://github.com/ngtcp2/ngtcp2 /src/ngtcp2 && \
+    git clone --depth 1 https://github.com/ngtcp2/ngtcp2 --branch "$NGTCP2_VERSION" /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
     /src/ngtcp2/configure --prefix=/usr/local --with-wolfssl --enable-lib-only --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
-    git clone --recursive --branch "$CURL_VERSION" https://github.com/curl/curl /src/curl && \
+    git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
