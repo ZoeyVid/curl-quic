@@ -13,7 +13,7 @@ RUN apk upgrade --no-cache -a && \
     git clone --depth 1 https://github.com/wolfSSL/wolfssl --branch "$WS_VERSION" /src/wolfssl && \
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
-    /src/wolfssl/configure CFLAGS="-DWOLFSSL_NO_ASN_STRICT" --prefix=/usr/local --enable-curl --disable-oldtls --enable-ech --enable-opensslextra --enable-quic --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --disable-shared --enable-static && \
+    /src/wolfssl/configure CFLAGS="-DWOLFSSL_NO_ASN_STRICT" --prefix=/usr/local --enable-curl=tiny --disable-oldtls --enable-quic --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --enable-ech --enable-opensslextra --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
