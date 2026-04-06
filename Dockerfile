@@ -14,7 +14,7 @@ RUN apk upgrade --no-cache -a && \
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
     # --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --enable-opensslextra
-    /src/wolfssl/configure CFLAGS="-DWOLFSSL_NO_ASN_STRICT" --prefix=/usr/local --enable-curl --enable-quic --enable-ech --disable-shared --enable-static && \
+    /src/wolfssl/configure --prefix=/usr/local --enable-curl --enable-quic --enable-ech --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     make -j "$(nproc)" install && \
     \
