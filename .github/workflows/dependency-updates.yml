@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
       - name: update wolfssl version
         id: update
         run: |
@@ -24,7 +24,7 @@ jobs:
           sed -i "s|ARG WS_VERSION=.*|ARG WS_VERSION=$WS_VERSION|" Dockerfile
           echo "version=$WS_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
       - name: update nghttp3 version
         id: update
         run: |
@@ -50,7 +50,7 @@ jobs:
           sed -i "s|ARG NGH3_VERSION=.*|ARG NGH3_VERSION=$NGH3_VERSION|" Dockerfile
           echo "version=$NGH3_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
       - name: update ngtcp2 version
         id: update
         run: |
@@ -76,7 +76,7 @@ jobs:
           sed -i "s|ARG NGTCP2_VERSION=.*|ARG NGTCP2_VERSION=$NGTCP2_VERSION|" Dockerfile
           echo "version=$NGTCP2_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
       - name: update curl version
         id: update
         run: |
@@ -102,7 +102,7 @@ jobs:
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           signoff: true
           delete-branch: true
