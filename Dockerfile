@@ -8,7 +8,7 @@ ARG NGTCP2_VERSION=v1.21.0
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static make autoconf automake libtool llvm file \
-                       nghttp2-dev nghttp2-static zlib-dev zlib-static
+                       linux-headers nghttp2-dev nghttp2-static zlib-dev zlib-static
 
 RUN for f in $(apk info --no-cache -qL libgcc-static libstdc++-dev); do rm /"$f"; done && \
     echo "-fuse-ld=lld --rtlib=compiler-rt --unwindlib=libunwind -stdlib=libc++" | tee /etc/clang*/*.cfg
