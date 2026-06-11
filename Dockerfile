@@ -1,5 +1,5 @@
-# syntax=docker/dockerfile:labs
-FROM alpine:3.24.0 AS build
+# syntax=docker/dockerfile:labs@sha256:7d49dad25a050e14338ba7028b0460243f9d911dedc160a8fe20c34738fef3af
+FROM alpine:3.24.0@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4 AS build
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_20_0
 ARG WS_VERSION=v5.9.1-stable
@@ -54,7 +54,7 @@ RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /s
     file /src/curl/src/curl
 
 
-FROM alpine:3.24.0
+FROM alpine:3.24.0@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache ca-certificates tzdata tini && \
