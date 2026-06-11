@@ -4,7 +4,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_20_0
 ARG WS_VERSION=v5.9.1-stable
 ARG NGH3_VERSION=v1.16.0
-ARG NGTCP2_VERSION=v1.21.0
+ARG NGTCP2_VERSION=v1.23.0
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static make autoconf automake libtool llvm file \
@@ -28,27 +28,26 @@ RUN git config --global advice.detachedHead false && \
 RUN git clone --depth 1 https://github.com/wolfSSL/wolfssl --branch "$WS_VERSION" /src/wolfssl && \
     cd /src/wolfssl && \
     /src/wolfssl/autogen.sh && \
-    # --enable-session-ticket --enable-earlydata --enable-psk --enable-harden --enable-altcertchains --enable-opensslextra
-    /src/wolfssl/configure CFLAGS="$CFLAGS -DWOLFSSL_NO_ASN_STRICT" --prefix=/usr --enable-curl --enable-quic --enable-ech --disable-shared --enable-static && \
+    /src/wolfssl/configure CFLAGS="$CFLAGS -DWOLFSSL_NO_ASN_STRICT" --prefix=/usr --enable-all --enable-static --disable-shared --disable-crypttests --disable-examples && \
     make -j "$(nproc)" install 
 
 RUN git clone --depth 1 --shallow-submodules --recurse-submodules https://github.com/ngtcp2/nghttp3 --branch "$NGH3_VERSION" /src/nghttp3 && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
-    /src/nghttp3/configure --prefix=/usr --enable-lib-only --disable-shared --enable-static && \
+    /src/nghttp3/configure --prefix=/usr --enable-lib-only --enable-static --disable-shared && \
     make -j "$(nproc)" install
 
 RUN git clone --depth 1 https://github.com/ngtcp2/ngtcp2 --branch "$NGTCP2_VERSION" /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
-    /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --disable-shared --enable-static && \
+    /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --enable-static --disable-shared && \
     make -j "$(nproc)" install
 
 RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
-    /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --enable-ech --enable-websockets --disable-shared --enable-static --disable-libcurl-option && \
+    /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --enable-ech --enable-websockets --enable-static --disable-shared --disable-libcurl-option && \
     make -j "$(nproc)" LDFLAGS="$LDFLAGS -static-pie -all-static" && \
     llvm-strip -s /src/curl/src/curl && \
     file /src/curl/src/curl
