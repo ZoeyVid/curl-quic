@@ -1,0 +1,1 @@
+--enable-ntlm --with-libpsl --with-libidn2 --with-brotli --with-libssh2 --with-ldap

@@ -7,8 +7,8 @@ ARG NGH3_VERSION=v1.16.0
 ARG NGTCP2_VERSION=v1.23.0
 
 RUN apk upgrade --no-cache -a && \
-    apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static make autoconf automake libtool llvm file \
-                       linux-headers nghttp2-dev nghttp2-static zlib-dev zlib-static
+    apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static autoconf automake make libtool llvm file \
+                       linux-headers nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static perl
 
 RUN for f in $(apk info --no-cache -qL libgcc-static libstdc++-dev); do rm /"$f"; done && \
     echo "-fuse-ld=lld --rtlib=compiler-rt --unwindlib=libunwind -stdlib=libc++" | tee /etc/clang*/*.cfg
@@ -47,9 +47,10 @@ RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /s
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
-    /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --enable-ech --enable-websockets --enable-static --disable-shared --disable-libcurl-option && \
+    /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-zstd --enable-httpsrr --enable-ech --enable-unity --enable-static --disable-shared --disable-docs && \
     make -j "$(nproc)" LDFLAGS="$LDFLAGS -static-pie -all-static" && \
     llvm-strip -s /src/curl/src/curl && \
+    ls -lh /src/curl/src/curl && \
     file /src/curl/src/curl
 
 
