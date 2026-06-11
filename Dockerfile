@@ -4,7 +4,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG CURL_VERSION=curl-8_20_0
 ARG WS_VERSION=v5.9.1-stable
 ARG NGH3_VERSION=v1.16.0
-ARG NGTCP2_VERSION=v1.23.0
+ARG NGTCP2_VERSION=v1.21.0
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static make autoconf automake libtool llvm file \
