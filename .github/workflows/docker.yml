@@ -86,9 +86,9 @@ jobs:
           docker buildx imagetools create --tag ghcr.io/zoeyvid/curl-quic:${{ github.run_number }} ghcr.io/zoeyvid/curl-quic:latest-x86_64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
       - name: copy curl binary
         run: |
-          docker run -d --pull always --platform amd64 --name curl-x86_64 zoeyvid/curl-quic:${{ github.ref_name }}-x86_64
+          docker run -d --pull always --platform amd64 --name curl-x86_64 ghcr.io/zoeyvid/curl-quic:${{ github.ref_name }}-x86_64
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
-          docker run -d --pull always --platform arm64 --name curl-aarch64 zoeyvid/curl-quic:${{ github.ref_name }}-aarch64
+          docker run -d --pull always --platform arm64 --name curl-aarch64 ghcr.io/zoeyvid/curl-quic:${{ github.ref_name }}-aarch64
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
