@@ -5,9 +5,10 @@ ARG CURL_VERSION=curl-8_20_0
 ARG WS_VERSION=v5.9.1-stable
 ARG NGH3_VERSION=v1.16.0
 ARG NGTCP2_VERSION=v1.23.0
+ARG BROTLI_VERSION=v1.2.0
 
 RUN apk upgrade --no-cache -a && \
-    apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static autoconf automake make libtool llvm file \
+    apk add --no-cache git clang lld compiler-rt llvm-libunwind-dev llvm-libunwind-static cmake ninja autoconf automake make libtool llvm file \
                        linux-headers nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static perl
 
 RUN for f in $(apk info --no-cache -qL libgcc-static libstdc++-dev); do rm /"$f"; done && \
@@ -43,11 +44,16 @@ RUN git clone --depth 1 https://github.com/ngtcp2/ngtcp2 --branch "$NGTCP2_VERSI
     /src/ngtcp2/configure --prefix=/usr --with-wolfssl --enable-lib-only --enable-static --disable-shared && \
     make -j "$(nproc)" install
 
+RUN git clone --depth 1 https://github.com/google/brotli --branch "$BROTLI_VERSION" /src/brotli && \
+    cd /src/brotli && \
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF && \
+    ninja install
+
 RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
-    /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-zstd --enable-httpsrr --enable-ech --enable-unity --enable-static --disable-shared --disable-docs && \
+    /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-brotli --with-zstd --enable-httpsrr --enable-ech --enable-ntlm --enable-unity --enable-static --disable-shared --disable-docs && \
     make -j "$(nproc)" LDFLAGS="$LDFLAGS -static-pie -all-static" && \
     llvm-strip -s /src/curl/src/curl && \
     ls -lh /src/curl/src/curl && \

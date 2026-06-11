@@ -84,6 +84,32 @@ jobs:
           branch: update-ngtcp2-version
           title: update ngtcp2 version to ${{ steps.update.outputs.version }}
           body: update ngtcp2 version to ${{ steps.update.outputs.version }}
+  brotli-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: update brotli version
+        id: update
+        run: |
+          BROTLI_VERSION="$(
+          git ls-remote --tags https://github.com/google/brotli v*.*.* \
+              | cut -d/ -f3 \
+              | sort -V \
+              | tail -1 \
+              | sed "s|\^{}||g"
+          )"
+          sed -i "s|ARG BROTLI_VERSION=.*|ARG BROTLI_VERSION=$BROTLI_VERSION|" Dockerfile
+          echo "version=$BROTLI_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update brotli version to ${{ steps.update.outputs.version }}
+          branch: update-brotli-version
+          title: update brotli version to ${{ steps.update.outputs.version }}
+          body: update brotli version to ${{ steps.update.outputs.version }}
   curl-update:
     runs-on: ubuntu-latest
     steps:
