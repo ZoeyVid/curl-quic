@@ -51,6 +51,9 @@ RUN git clone --depth 1 https://github.com/google/brotli --branch "$BROTLI_VERSI
 
 RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /src/curl && \
     cd /src/curl && \
+    wget -q https://github.com/curl/curl/commit/50ffc359e943b2b55268b6c8507524fb0c23dc9c.patch -O /src/curl/q.patch && \
+    echo "3da404dada238850f37e3aa4cbb917441004aa080628fba66c982f1f777e6beb  /src/curl/1.patch" | sha256sum -c - && \
+    git apply /src/curl/1.patch && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
     /src/curl/configure LDFLAGS="$LDFLAGS -static" PKG_CONFIG="pkg-config --static" --without-libpsl --with-wolfssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-brotli --with-zstd --enable-httpsrr --enable-ech --enable-ntlm --enable-unity --enable-static --disable-shared --disable-docs && \
