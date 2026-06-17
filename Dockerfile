@@ -23,7 +23,7 @@ ARG LD=ld.lld
 ARG AR=llvm-ar
 
 ARG FLAGS
-ARG CFLAGS="$FLAGS -m64 -O3 -pipe -flto=full -ffunction-sections -fdata-sections -fno-math-errno -ffp-contract=fast -fstack-clash-protection -fstack-protector-strong -fzero-call-used-regs=used-gpr -fstrict-flex-arrays=3 -ftrivial-auto-var-init=zero -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -fno-semantic-interposition -fno-plt -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -Wformat=2 -Werror=format-security -Wno-sign-compare"
+ARG CFLAGS="$FLAGS -m64 -O3 -pipe -flto=full -ffunction-sections -fdata-sections -fno-math-errno -ffp-contract=fast -fstack-clash-protection -fstack-protector-strong -fzero-call-used-regs=used-gpr -fstrict-flex-arrays=3 -ftrivial-auto-var-init=zero -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -fno-semantic-interposition -fno-plt -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3 -Wformat=2 -Werror=format-security"
 ARG CXXFLAGS="$CFLAGS"
 ARG LDFLAGS="-m64 -Wl,-s -Wl,-O2 -Wl,--lto-O3 -Wl,--icf=safe -Wl,--gc-sections -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now -Wl,--sort-common -Wl,--as-needed -Wl,-z,pack-relative-relocs -Wl,--no-copy-dt-needed-entries"
 
@@ -50,18 +50,20 @@ RUN git clone --depth 1 https://github.com/ngtcp2/ngtcp2 --branch "$NGTCP2_VERSI
 
 RUN git clone --depth 1 https://github.com/google/brotli --branch "$BROTLI_VERSION" /src/brotli && \
     cd /src/brotli && \
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF && \
+    cmake /src/brotli -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF && \
     ninja install
 
+ARG LDFLAGS="$LDFLAGS -static-pie"
 RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
-    /src/curl/configure LDFLAGS="$LDFLAGS -static-pie" PKG_CONFIG="pkg-config --static" --without-libpsl --with-openssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-brotli --with-zstd --enable-httpsrr --enable-ech --enable-ntlm --enable-unity --enable-static --disable-shared --disable-docs  && \
-    make -j "$(nproc)" LDFLAGS="$LDFLAGS -static-pie -all-static" && \
+    /src/curl/configure --without-libpsl --with-openssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-brotli --with-zstd --enable-httpsrr --enable-ech --enable-ntlm --enable-unity --enable-static --disable-shared --disable-docs  && \
+    make -j "$(nproc)" && \
     llvm-strip -s /src/curl/src/curl && \
     ls -lh /src/curl/src/curl && \
-    file /src/curl/src/curl
+    file /src/curl/src/curl && \
+    /src/curl/src/curl -V
 
 
 FROM scratch
