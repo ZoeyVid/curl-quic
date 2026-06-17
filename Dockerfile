@@ -2,11 +2,11 @@
 FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS build
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-ARG AWSLC_VER=6f246af4cd1de8cee8c62d76139bcda299c1aa00 # v5.0.0
-ARG NGH3_VERSION=v1.16.0
-ARG NGTCP2_VERSION=v1.23.0
-ARG BROTLI_VERSION=v1.2.0
-ARG CURL_VERSION=curl-8_20_0
+ARG AWSLC_VERSION=6f246af4cd1de8cee8c62d76139bcda299c1aa00 # v5.0.0
+ARG NGHTTP3_VERSION=5613665eac0c209655db95c539291d7682a8b6a3 # v1.16.0
+ARG NGTCP2_VERSION=9ccd9017e6f061d25fa890e231efb253fa18dbac # v1.23.0
+ARG BROTLI_VERSION=028fb5a23661f123017c060daa546b55cf4bde29 # v1.2.0
+ARG CURL_VERSION=6e3f8dc1f173b47de9a68516ce4b95bf25598c2f # curl-8_20_0
 
 COPY git-clone-commit.sh /usr/local/bin
 
@@ -30,31 +30,31 @@ ARG LDFLAGS="-m64 -Wl,-s -Wl,-O2 -Wl,--lto-O3 -Wl,--icf=safe -Wl,--gc-sections -
 RUN git config --global advice.detachedHead false && \
     git config --global init.defaultBranch main
 
-RUN git-clone-commit.sh https://github.com/aws/aws-lc "$AWSLC_VER" /src/aws-lc && \
+RUN git-clone-commit.sh https://github.com/aws/aws-lc "$AWSLC_VERSION" /src/aws-lc && \
     cd /src/aws-lc && \
     cmake /src/aws-lc -G Ninja -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DDISABLE_GO=ON -DDISABLE_PERL=ON -DBUILD_TESTING=OFF && \
     ninja install
 
-RUN git clone --depth 1 --shallow-submodules --recurse-submodules https://github.com/ngtcp2/nghttp3 --branch "$NGH3_VERSION" /src/nghttp3 && \
+RUN git-clone-commit.sh https://github.com/ngtcp2/nghttp3 "$NGHTTP3_VERSION" /src/nghttp3 true && \
     cd /src/nghttp3 && \
     autoreconf -fi && \
     /src/nghttp3/configure --prefix=/usr --enable-lib-only --enable-static --disable-shared && \
     make -j "$(nproc)" install
 
 ARG BORINGSSL_LIBS="-lssl -lcrypto"
-RUN git clone --depth 1 https://github.com/ngtcp2/ngtcp2 --branch "$NGTCP2_VERSION" /src/ngtcp2 && \
+RUN git-clone-commit.sh https://github.com/ngtcp2/ngtcp2 "$NGTCP2_VERSION" /src/ngtcp2 && \
     cd /src/ngtcp2 && \
     autoreconf -fi && \
     /src/ngtcp2/configure --prefix=/usr --with-boringssl --enable-lib-only --enable-static --disable-shared && \
     make -j "$(nproc)" install
 
-RUN git clone --depth 1 https://github.com/google/brotli --branch "$BROTLI_VERSION" /src/brotli && \
+RUN git-clone-commit.sh https://github.com/google/brotli "$BROTLI_VERSION" /src/brotli && \
     cd /src/brotli && \
     cmake /src/brotli -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF && \
     ninja install
 
 ARG LDFLAGS="$LDFLAGS -static-pie"
-RUN git clone --depth 1 https://github.com/curl/curl --branch "$CURL_VERSION" /src/curl && \
+RUN git-clone-commit.sh https://github.com/curl/curl "$CURL_VERSION" /src/curl && \
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \

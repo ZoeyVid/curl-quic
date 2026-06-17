@@ -66,7 +66,8 @@ jobs:
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - name: Read version
         id: version
-        run: echo "version=$(echo $(cat Dockerfile | grep "^ARG CURL_VERSION=.*$" | sed "s|ARG CURL_VERSION=||g" | sed "s|_|\.|g")-wolfssl-$(cat Dockerfile | grep "^ARG WS_VERSION=.*$" | sed "s|ARG WS_VERSION=v\([0-9.]\+\).*|\1|g")-nghttp3-$(cat Dockerfile | grep "^ARG NGH3_VERSION=.*$" | sed "s|ARG NGH3_VERSION=v||g")-ngtcp2-$(cat Dockerfile | grep "^ARG NGTCP2_VERSION=.*$" | sed "s|ARG NGTCP2_VERSION=v||g"))" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(echo $(cat Dockerfile | grep "^ARG CURL_VERSION=.*$" | sed "s|ARG CURL_VERSION=.* # ||g" | sed "s|_|\.|g")-awslc-$(cat Dockerfile | grep "^ARG AWSLC_VERSION=.*$" | sed "s|ARG AWSLC_VERSION=.* # v||g")-nghttp3-$(cat Dockerfile | grep "^ARG NGHTTP3_VERSION=.*$" | sed "s|ARG NGHTTP3_VERSION=.* # v||g")-ngtcp2-$(cat Dockerfile | grep "^ARG NGTCP2_VERSION=.*$" | sed "s|ARG NGTCP2_VERSION=.* # v||g"))" >> $GITHUB_OUTPUT
       - name: Login to DockerHub
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
