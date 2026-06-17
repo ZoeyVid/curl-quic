@@ -7,31 +7,33 @@ on:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 jobs:
-  wolfssl-update:
+  aws-lc-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-      - name: update wolfssl version
+      - name: update aws-lc version
         id: update
         run: |
-          WS_VERSION="$(
-          git ls-remote --tags https://github.com/wolfSSL/wolfssl v*.*.*-stable \
+          AWSLC_VER="$(
+          git ls-remote --tags --refs https://github.com/aws/aws-lc \
               | cut -d/ -f3 \
               | sort -V \
+              | grep -vi rc \
               | tail -1
           )"
-          sed -i "s|ARG WS_VERSION=.*|ARG WS_VERSION=$WS_VERSION|" Dockerfile
-          echo "version=$WS_VERSION" >> $GITHUB_OUTPUT
+          AWSLC_SHA="$(git ls-remote https://github.com/aws/aws-lc "$AWSLC_VER" | cut -f1)"
+          sed -i "s|ARG AWSLC_VER=.*|ARG AWSLC_VER=$AWSLC_SHA # $AWSLC_VER|" Dockerfile
+          echo "version=$AWSLC_VER" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
-          commit-message: update wolfssl version to ${{ steps.update.outputs.version }}
-          branch: update-wolfssl-version
-          title: update wolfssl version to ${{ steps.update.outputs.version }}
-          body: update wolfssl version to ${{ steps.update.outputs.version }}
+          commit-message: update aws-lc version to ${{ steps.update.outputs.version }}
+          branch: update-aws-lc-version
+          title: update aws-lc version to ${{ steps.update.outputs.version }}
+          body: update aws-lc version to ${{ steps.update.outputs.version }}
   nghttp3-update:
     runs-on: ubuntu-latest
     steps:
@@ -41,13 +43,14 @@ jobs:
         id: update
         run: |
           NGH3_VERSION="$(
-          git ls-remote --tags https://github.com/ngtcp2/nghttp3 v*.*.* \
+          git ls-remote --tags --refs https://github.com/ngtcp2/nghttp3 \
               | cut -d/ -f3 \
               | sort -V \
-              | tail -1 \
-              | sed "s|\^{}||g"
+              | grep -vi rc \
+              | tail -1
           )"
-          sed -i "s|ARG NGH3_VERSION=.*|ARG NGH3_VERSION=$NGH3_VERSION|" Dockerfile
+          NGH3_SHA="$(git ls-remote https://github.com/ngtcp2/nghttp3 "$NGH3_VERSION" | cut -f1)"
+          sed -i "s|ARG NGH3_VERSION=.*|ARG NGH3_VERSION=$NGH3_SHA # $NGH3_VERSION|" Dockerfile
           echo "version=$NGH3_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -66,15 +69,16 @@ jobs:
       - name: update ngtcp2 version
         id: update
         run: |
-          NGTCP2_VERSION="$(
-          git ls-remote --tags https://github.com/ngtcp2/ngtcp2 v*.*.* \
+          NGT2_VERSION="$(
+          git ls-remote --tags --refs https://github.com/ngtcp2/ngtcp2 \
               | cut -d/ -f3 \
               | sort -V \
-              | tail -1 \
-              | sed "s|\^{}||g"
+              | grep -vi rc \
+              | tail -1
           )"
-          sed -i "s|ARG NGTCP2_VERSION=.*|ARG NGTCP2_VERSION=$NGTCP2_VERSION|" Dockerfile
-          echo "version=$NGTCP2_VERSION" >> $GITHUB_OUTPUT
+          NGT2_SHA="$(git ls-remote https://github.com/ngtcp2/ngtcp2 "$NGT2_VERSION" | cut -f1)"
+          sed -i "s|ARG NGT2_VERSION=.*|ARG NGT2_VERSION=$NGT2_SHA # $NGT2_VERSION|" Dockerfile
+          echo "version=$NGT2_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
@@ -93,13 +97,14 @@ jobs:
         id: update
         run: |
           BROTLI_VERSION="$(
-          git ls-remote --tags https://github.com/google/brotli v*.*.* \
+          git ls-remote --tags --refs https://github.com/google/brotli \
               | cut -d/ -f3 \
               | sort -V \
-              | tail -1 \
-              | sed "s|\^{}||g"
+              | grep -vi rc \
+              | tail -1
           )"
-          sed -i "s|ARG BROTLI_VERSION=.*|ARG BROTLI_VERSION=$BROTLI_VERSION|" Dockerfile
+          BROTLI_SHA="$(git ls-remote https://github.com/google/brotli "$BROTLI_VERSION" | cut -f1)"
+          sed -i "s|ARG BROTLI_VERSION=.*|ARG BROTLI_VERSION=$BROTLI_SHA # $BROTLI_VERSION|" Dockerfile
           echo "version=$BROTLI_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -119,13 +124,14 @@ jobs:
         id: update
         run: |
           CURL_VERSION="$(
-          git ls-remote --tags https://github.com/curl/curl curl-*_*_* \
+          git ls-remote --tags --refs https://github.com/curl/curl curl-* \
               | cut -d/ -f3 \
               | sort -V \
-              | tail -1 \
-              | sed "s|\^{}||g"
+              | grep -vi rc \
+              | tail -1
           )"
-          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_VERSION|" Dockerfile
+          CURL_SHA="$(git ls-remote https://github.com/curl/curl "$CURL_VERSION" | cut -f1)"
+          sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_SHA # $CURL_VERSION|" Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
