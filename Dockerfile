@@ -5,7 +5,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 ARG AWSLC_VER=6f246af4cd1de8cee8c62d76139bcda299c1aa00 # v5.0.0
 ARG NGH3_VERSION=v1.16.0
 ARG NGT2_VERSION=v1.23.0
-ARG BROTLI_VERSION=v1.2.0
+ARG BROTLI_VERSION=028fb5a23661f123017c060daa546b55cf4bde29 # v1.2.0
 ARG CURL_VERSION=curl-8_20_0
 
 COPY git-clone-commit.sh /usr/local/bin
