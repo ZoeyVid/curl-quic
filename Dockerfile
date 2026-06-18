@@ -12,7 +12,7 @@ COPY git-clone-commit.sh /usr/local/bin
 
 RUN apk upgrade --no-cache -a && \
     apk add --no-cache git clang lld compiler-rt llvm-libunwind-static libc++-dev linux-headers cmake ninja autoconf automake make libtool llvm file \
-                       nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static perl
+                       nghttp2-dev nghttp2-static zlib-dev zlib-static zstd-dev zstd-static
 
 RUN for f in $(apk info --no-cache -qL libgcc-static libstdc++-dev); do rm /"$f"; done && \
     echo "-fuse-ld=lld --rtlib=compiler-rt --unwindlib=libunwind -stdlib=libc++ -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE" | tee /etc/clang*/*.cfg
@@ -58,7 +58,7 @@ RUN git-clone-commit.sh https://github.com/curl/curl "$CURL_VERSION" /src/curl &
     cd /src/curl && \
     sed -i "s|-DEV||g" /src/curl/include/curl/curlver.h && \
     autoreconf -fi && \
-    /src/curl/configure --without-libpsl --with-openssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-brotli --with-zstd --enable-httpsrr --enable-ech --enable-ntlm --enable-unity --enable-static --disable-shared --disable-docs  && \
+    /src/curl/configure --without-libpsl --with-openssl --with-nghttp2 --with-ngtcp2 --with-nghttp3 --with-zlib --with-brotli --with-zstd --enable-httpsrr --enable-ech --enable-tls-srp --enable-ssls-export --enable-ntlm --enable-unity --disable-shared --enable-static && \
     make -j "$(nproc)" && \
     llvm-strip -s /src/curl/src/curl && \
     ls -lh /src/curl/src/curl && \

@@ -1,1 +1,6 @@
---with-libpsl --with-libidn2
+--with-libpsl
+--with-{libidn2,winidn}
+--with-{libssh,libssh2}
+
+--with-gssapi
+--with-gsasl
