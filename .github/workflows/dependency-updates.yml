@@ -126,6 +126,7 @@ jobs:
           ZSTD_VERSION="$(
           git ls-remote --tags --refs https://github.com/facebook/zstd \
               | cut -d/ -f3 \
+              | grep "^v\?[0-9.]\+$" \
               | sort -V \
               | grep -vi rc \
               | tail -1
@@ -180,6 +181,7 @@ jobs:
           ZLIBNG_VERSION="$(
           git ls-remote --tags --refs https://github.com/zlib-ng/zlib-ng \
               | cut -d/ -f3 \
+              | grep "^[0-9.]\+$" \
               | sort -V \
               | grep -vi rc \
               | tail -1
