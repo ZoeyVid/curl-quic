@@ -1,8 +1,11 @@
 --with-libpsl
 --with-{libidn2,winidn}
---with-{libssh,libssh2}
+dep updates.yml + cmake options
 
 --with-gssapi
 --with-gsasl
+
+ldap?
+other curl options?
 
 revert to wolfssl
