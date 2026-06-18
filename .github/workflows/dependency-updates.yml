@@ -34,33 +34,6 @@ jobs:
           branch: update-aws-lc-version
           title: update aws-lc version to ${{ steps.update.outputs.version }}
           body: update aws-lc version to ${{ steps.update.outputs.version }}
-  nghttp3-update:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-      - name: update nghttp3 version
-        id: update
-        run: |
-          NGHTTP3_VERSION="$(
-          git ls-remote --tags --refs https://github.com/ngtcp2/nghttp3 \
-              | cut -d/ -f3 \
-              | sort -V \
-              | grep -vi rc \
-              | tail -1
-          )"
-          NGHTTP3_SHA="$(git ls-remote https://github.com/ngtcp2/nghttp3 "$NGHTTP3_VERSION" | cut -f1)"
-          sed -i "s|ARG NGHTTP3_VERSION=.*|ARG NGHTTP3_VERSION=$NGHTTP3_SHA # $NGHTTP3_VERSION|" Dockerfile
-          echo "version=$NGHTTP3_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
-        with:
-          signoff: true
-          delete-branch: true
-          commit-message: update nghttp3 version to ${{ steps.update.outputs.version }}
-          branch: update-nghttp3-version
-          title: update nghttp3 version to ${{ steps.update.outputs.version }}
-          body: update nghttp3 version to ${{ steps.update.outputs.version }}
   ngtcp2-update:
     runs-on: ubuntu-latest
     steps:
@@ -88,6 +61,87 @@ jobs:
           branch: update-ngtcp2-version
           title: update ngtcp2 version to ${{ steps.update.outputs.version }}
           body: update ngtcp2 version to ${{ steps.update.outputs.version }}
+  nghttp3-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: update nghttp3 version
+        id: update
+        run: |
+          NGHTTP3_VERSION="$(
+          git ls-remote --tags --refs https://github.com/ngtcp2/nghttp3 \
+              | cut -d/ -f3 \
+              | sort -V \
+              | grep -vi rc \
+              | tail -1
+          )"
+          NGHTTP3_SHA="$(git ls-remote https://github.com/ngtcp2/nghttp3 "$NGHTTP3_VERSION" | cut -f1)"
+          sed -i "s|ARG NGHTTP3_VERSION=.*|ARG NGHTTP3_VERSION=$NGHTTP3_SHA # $NGHTTP3_VERSION|" Dockerfile
+          echo "version=$NGHTTP3_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update nghttp3 version to ${{ steps.update.outputs.version }}
+          branch: update-nghttp3-version
+          title: update nghttp3 version to ${{ steps.update.outputs.version }}
+          body: update nghttp3 version to ${{ steps.update.outputs.version }}
+  nghttp2-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: update nghttp2 version
+        id: update
+        run: |
+          NGHTTP2_VERSION="$(
+          git ls-remote --tags --refs https://github.com/nghttp2/nghttp2 \
+              | cut -d/ -f3 \
+              | sort -V \
+              | grep -vi rc \
+              | tail -1
+          )"
+          NGHTTP2_SHA="$(git ls-remote https://github.com/nghttp2/nghttp2 "$NGHTTP2_VERSION" | cut -f1)"
+          sed -i "s|ARG NGHTTP2_VERSION=.*|ARG NGHTTP2_VERSION=$NGHTTP2_SHA # $NGHTTP2_VERSION|" Dockerfile
+          echo "version=$NGHTTP2_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update nghttp2 version to ${{ steps.update.outputs.version }}
+          branch: update-nghttp2-version
+          title: update nghttp2 version to ${{ steps.update.outputs.version }}
+          body: update nghttp2 version to ${{ steps.update.outputs.version }}
+  zstd-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: update zstd version
+        id: update
+        run: |
+          ZSTD_VERSION="$(
+          git ls-remote --tags --refs https://github.com/facebook/zstd \
+              | cut -d/ -f3 \
+              | sort -V \
+              | grep -vi rc \
+              | tail -1
+          )"
+          ZSTD_SHA="$(git ls-remote https://github.com/facebook/zstd "$ZSTD_VERSION" | cut -f1)"
+          sed -i "s|ARG ZSTD_VERSION=.*|ARG ZSTD_VERSION=$ZSTD_SHA # $ZSTD_VERSION|" Dockerfile
+          echo "version=$ZSTD_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update zstd version to ${{ steps.update.outputs.version }}
+          branch: update-zstd-version
+          title: update zstd version to ${{ steps.update.outputs.version }}
+          body: update zstd version to ${{ steps.update.outputs.version }}
   brotli-update:
     runs-on: ubuntu-latest
     steps:
@@ -115,6 +169,33 @@ jobs:
           branch: update-brotli-version
           title: update brotli version to ${{ steps.update.outputs.version }}
           body: update brotli version to ${{ steps.update.outputs.version }}
+  zlibng-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - name: update zlibng version
+        id: update
+        run: |
+          ZLIBNG_VERSION="$(
+          git ls-remote --tags --refs https://github.com/zlib-ng/zlib-ng \
+              | cut -d/ -f3 \
+              | sort -V \
+              | grep -vi rc \
+              | tail -1
+          )"
+          ZLIBNG_SHA="$(git ls-remote https://github.com/zlib-ng/zlib-ng "$ZLIBNG_VERSION" | cut -f1)"
+          sed -i "s|ARG ZLIBNG_VERSION=.*|ARG ZLIBNG_VERSION=$ZLIBNG_SHA # $ZLIBNG_VERSION|" Dockerfile
+          echo "version=$ZLIBNG_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update zlibng version to ${{ steps.update.outputs.version }}
+          branch: update-zlibng-version
+          title: update zlibng version to ${{ steps.update.outputs.version }}
+          body: update zlibng version to ${{ steps.update.outputs.version }}
   curl-update:
     runs-on: ubuntu-latest
     steps:
