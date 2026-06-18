@@ -7,12 +7,12 @@ on:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 jobs:
-  aws-lc-update:
+  awslc-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: update aws-lc version
+      - name: update awslc version
         id: update
         run: |
           AWSLC_VERSION="$(
@@ -30,10 +30,37 @@ jobs:
         with:
           signoff: true
           delete-branch: true
-          commit-message: update aws-lc version to ${{ steps.update.outputs.version }}
-          branch: update-aws-lc-version
-          title: update aws-lc version to ${{ steps.update.outputs.version }}
-          body: update aws-lc version to ${{ steps.update.outputs.version }}
+          commit-message: update awslc version to ${{ steps.update.outputs.version }}
+          branch: update-awslc-version
+          title: update awslc version to ${{ steps.update.outputs.version }}
+          body: update awslc version to ${{ steps.update.outputs.version }}
+  libssh-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: update libssh version
+        id: update
+        run: |
+          LIBSSH_VERSION="$(
+          git ls-remote --tags --refs https://git.libssh.org/projects/libssh.git libssh-* \
+              | cut -d/ -f3 \
+              | sort -V \
+              | grep -vi rc \
+              | tail -1
+          )"
+          LIBSSH_SHA="$(git ls-remote https://git.libssh.org/projects/libssh.git "$LIBSSH_VERSION" | cut -f1)"
+          sed -i "s|ARG LIBSSH_VERSION=.*|ARG LIBSSH_VERSION=$LIBSSH_SHA # $LIBSSH_VERSION|" Dockerfile
+          echo "version=$LIBSSH_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update libssh version to ${{ steps.update.outputs.version }}
+          branch: update-libssh-version
+          title: update libssh version to ${{ steps.update.outputs.version }}
+          body: update libssh version to ${{ steps.update.outputs.version }}
   ngtcp2-update:
     runs-on: ubuntu-latest
     steps:
@@ -198,6 +225,33 @@ jobs:
           branch: update-zlibng-version
           title: update zlibng version to ${{ steps.update.outputs.version }}
           body: update zlibng version to ${{ steps.update.outputs.version }}
+  cares-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: update cares version
+        id: update
+        run: |
+          CARES_VERSION="$(
+          git ls-remote --tags --refs https://github.com/c-ares/c-ares \
+              | cut -d/ -f3 \
+              | sort -V \
+              | grep -vi rc \
+              | tail -1
+          )"
+          CARES_SHA="$(git ls-remote https://github.com/c-ares/c-ares "$CARES_VERSION" | cut -f1)"
+          sed -i "s|ARG CARES_VERSION=.*|ARG CARES_VERSION=$CARES_SHA # $CARES_VERSION|" Dockerfile
+          echo "version=$CARES_VERSION" >> $GITHUB_OUTPUT
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update cares version to ${{ steps.update.outputs.version }}
+          branch: update-cares-version
+          title: update cares version to ${{ steps.update.outputs.version }}
+          body: update cares version to ${{ steps.update.outputs.version }}
   curl-update:
     runs-on: ubuntu-latest
     steps:

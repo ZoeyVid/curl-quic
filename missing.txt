@@ -1,9 +1,8 @@
---with-libpsl
---with-{libidn2,winidn}
-dep updates.yml + cmake options
+CURL_USE_LIBPSL
+USE_LIBIDN2
 
---with-gssapi
---with-gsasl
+CURL_USE_GSSAPI
+CURL_USE_GSASL
 
 ldap?
 other curl options?
