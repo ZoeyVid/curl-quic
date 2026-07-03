@@ -16,7 +16,7 @@ jobs:
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           registry: ghcr.io
           username: zoeyvid
@@ -42,7 +42,7 @@ jobs:
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           registry: ghcr.io
           username: zoeyvid
@@ -58,7 +58,7 @@ jobs:
             FLAGS=-mbranch-protection=standard
           
   merge:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: [build-x86_64, build-aarch64]
     if: ${{ github.repository_owner == 'ZoeyVid' }}
     steps:
@@ -69,12 +69,12 @@ jobs:
         run: |
           echo "version=$(echo $(cat Dockerfile | grep "^ARG CURL_VERSION=.*$" | sed "s|ARG CURL_VERSION=.* # ||g" | sed "s|_|\.|g")-awslc-$(cat Dockerfile | grep "^ARG AWSLC_VERSION=.*$" | sed "s|ARG AWSLC_VERSION=.* # v||g")-nghttp3-$(cat Dockerfile | grep "^ARG NGHTTP3_VERSION=.*$" | sed "s|ARG NGHTTP3_VERSION=.* # v||g")-ngtcp2-$(cat Dockerfile | grep "^ARG NGTCP2_VERSION=.*$" | sed "s|ARG NGTCP2_VERSION=.* # v||g"))" >> $GITHUB_OUTPUT
       - name: Login to DockerHub
-        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
+        uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           registry: ghcr.io
           username: zoeyvid

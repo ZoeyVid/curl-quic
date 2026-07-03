@@ -4,11 +4,11 @@ on:
     branches:
       - latest
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 * * * *"
   workflow_dispatch:
 jobs:
   awslc-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -35,7 +35,7 @@ jobs:
           title: update awslc version to ${{ steps.update.outputs.version }}
           body: update awslc version to ${{ steps.update.outputs.version }}
   libssh-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -62,7 +62,7 @@ jobs:
           title: update libssh version to ${{ steps.update.outputs.version }}
           body: update libssh version to ${{ steps.update.outputs.version }}
   ngtcp2-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -89,7 +89,7 @@ jobs:
           title: update ngtcp2 version to ${{ steps.update.outputs.version }}
           body: update ngtcp2 version to ${{ steps.update.outputs.version }}
   nghttp3-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -116,7 +116,7 @@ jobs:
           title: update nghttp3 version to ${{ steps.update.outputs.version }}
           body: update nghttp3 version to ${{ steps.update.outputs.version }}
   nghttp2-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -143,7 +143,7 @@ jobs:
           title: update nghttp2 version to ${{ steps.update.outputs.version }}
           body: update nghttp2 version to ${{ steps.update.outputs.version }}
   zstd-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -171,7 +171,7 @@ jobs:
           title: update zstd version to ${{ steps.update.outputs.version }}
           body: update zstd version to ${{ steps.update.outputs.version }}
   brotli-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -198,7 +198,7 @@ jobs:
           title: update brotli version to ${{ steps.update.outputs.version }}
           body: update brotli version to ${{ steps.update.outputs.version }}
   zlibng-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -226,7 +226,7 @@ jobs:
           title: update zlibng version to ${{ steps.update.outputs.version }}
           body: update zlibng version to ${{ steps.update.outputs.version }}
   cares-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -253,7 +253,7 @@ jobs:
           title: update cares version to ${{ steps.update.outputs.version }}
           body: update cares version to ${{ steps.update.outputs.version }}
   curl-update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
