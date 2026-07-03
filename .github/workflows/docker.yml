@@ -58,7 +58,7 @@ jobs:
             FLAGS=-mbranch-protection=standard
           
   merge:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     needs: [build-x86_64, build-aarch64]
     if: ${{ github.repository_owner == 'ZoeyVid' }}
     steps:
