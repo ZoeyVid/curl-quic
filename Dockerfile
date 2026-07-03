@@ -122,4 +122,3 @@ FROM scratch
 COPY --from=build /src/curl/src/curl /usr/local/bin/curl
 WORKDIR /host
 ENTRYPOINT ["curl"]
-CMD ["-V"]
