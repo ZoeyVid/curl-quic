@@ -7,52 +7,46 @@ on:
 jobs:
   build-x86_64:
     runs-on: ubuntu-latest
-    if: ${{ github.repository_owner == 'ZoeyVid' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
-      - name: Login to GitHub Container Registry
+      - name: ghcr.io-login
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
+        if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
           username: zoeyvid
           password: ${{ github.token }}
-      - name: Build
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+      - uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           file: ./Dockerfile
-          push: true
+          push: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
           tags: ghcr.io/zoeyvid/curl-quic:latest-x86_64
           build-args: |
             FLAGS=-march=x86-64-v2 -mtune=generic -fcf-protection=full
           
   build-aarch64:
     runs-on: ubuntu-24.04-arm
-    if: ${{ github.repository_owner == 'ZoeyVid' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
-      - name: Login to GitHub Container Registry
+      - name: ghcr.io-login
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
+        if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
           username: zoeyvid
           password: ${{ github.token }}
-      - name: Build
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+      - uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           file: ./Dockerfile
-          push: true
+          push: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
           tags: ghcr.io/zoeyvid/curl-quic:latest-aarch64
           build-args: |
             FLAGS=-mbranch-protection=standard
@@ -60,36 +54,35 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     needs: [build-x86_64, build-aarch64]
-    if: ${{ github.repository_owner == 'ZoeyVid' }}
+    if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Read version
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: version
         id: version
         run: |
           echo "version=$(echo $(cat Dockerfile | grep "^ARG CURL_VERSION=.*$" | sed "s|ARG CURL_VERSION=.* # ||g" | sed "s|_|\.|g")-awslc-$(cat Dockerfile | grep "^ARG AWSLC_VERSION=.*$" | sed "s|ARG AWSLC_VERSION=.* # v||g")-nghttp3-$(cat Dockerfile | grep "^ARG NGHTTP3_VERSION=.*$" | sed "s|ARG NGHTTP3_VERSION=.* # v||g")-ngtcp2-$(cat Dockerfile | grep "^ARG NGTCP2_VERSION=.*$" | sed "s|ARG NGTCP2_VERSION=.* # v||g"))" >> $GITHUB_OUTPUT
-      - name: Login to DockerHub
+      - name: docker.io-login
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Login to GitHub Container Registry
+      - name: ghcr.io-login
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
         with:
           registry: ghcr.io
           username: zoeyvid
           password: ${{ github.token }}
-      - name: create multiarch
+      - name: merge
         run: |
           docker buildx imagetools create --tag zoeyvid/curl-quic:latest ghcr.io/zoeyvid/curl-quic:latest-x86_64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
           docker buildx imagetools create --tag zoeyvid/curl-quic:${{ github.run_number }} ghcr.io/zoeyvid/curl-quic:latest-x86_64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
           docker buildx imagetools create --tag ghcr.io/zoeyvid/curl-quic:latest ghcr.io/zoeyvid/curl-quic:latest-x86_64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
           docker buildx imagetools create --tag ghcr.io/zoeyvid/curl-quic:${{ github.run_number }} ghcr.io/zoeyvid/curl-quic:latest-x86_64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
-      - name: copy curl binary
+      - name: extract
         run: |
-          docker run -d --pull always --platform amd64 --name curl-x86_64 ghcr.io/zoeyvid/curl-quic:${{ github.ref_name }}-x86_64
+          docker run -d --pull always --platform amd64 --name curl-x86_64 ghcr.io/zoeyvid/curl-quic:latest-x86_64
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
-          docker run -d --pull always --platform arm64 --name curl-aarch64 ghcr.io/zoeyvid/curl-quic:${{ github.ref_name }}-aarch64
+          docker run -d --pull always --platform arm64 --name curl-aarch64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
