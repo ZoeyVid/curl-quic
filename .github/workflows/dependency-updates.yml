@@ -2,7 +2,7 @@ name: dependency-updates
 on:
   push:
     branches:
-      - latest
+      - develop
   schedule:
     - cron: "0 * * * *"
   workflow_dispatch:
@@ -10,8 +10,7 @@ jobs:
   awslc-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update awslc version
         id: update
         run: |
@@ -25,8 +24,7 @@ jobs:
           AWSLC_SHA="$(git ls-remote https://github.com/aws/aws-lc "$AWSLC_VERSION" | cut -f1)"
           sed -i "s|ARG AWSLC_VERSION=.*|ARG AWSLC_VERSION=$AWSLC_SHA # $AWSLC_VERSION|" Dockerfile
           echo "version=$AWSLC_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -37,8 +35,7 @@ jobs:
   libssh-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update libssh version
         id: update
         run: |
@@ -52,8 +49,7 @@ jobs:
           LIBSSH_SHA="$(git ls-remote https://git.libssh.org/projects/libssh.git "$LIBSSH_VERSION" | cut -f1)"
           sed -i "s|ARG LIBSSH_VERSION=.*|ARG LIBSSH_VERSION=$LIBSSH_SHA # $LIBSSH_VERSION|" Dockerfile
           echo "version=$LIBSSH_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -64,8 +60,7 @@ jobs:
   ngtcp2-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update ngtcp2 version
         id: update
         run: |
@@ -79,8 +74,7 @@ jobs:
           NGTCP2_SHA="$(git ls-remote https://github.com/ngtcp2/ngtcp2 "$NGTCP2_VERSION" | cut -f1)"
           sed -i "s|ARG NGTCP2_VERSION=.*|ARG NGTCP2_VERSION=$NGTCP2_SHA # $NGTCP2_VERSION|" Dockerfile
           echo "version=$NGTCP2_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -91,8 +85,7 @@ jobs:
   nghttp3-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update nghttp3 version
         id: update
         run: |
@@ -106,8 +99,7 @@ jobs:
           NGHTTP3_SHA="$(git ls-remote https://github.com/ngtcp2/nghttp3 "$NGHTTP3_VERSION" | cut -f1)"
           sed -i "s|ARG NGHTTP3_VERSION=.*|ARG NGHTTP3_VERSION=$NGHTTP3_SHA # $NGHTTP3_VERSION|" Dockerfile
           echo "version=$NGHTTP3_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -118,8 +110,7 @@ jobs:
   nghttp2-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update nghttp2 version
         id: update
         run: |
@@ -133,8 +124,7 @@ jobs:
           NGHTTP2_SHA="$(git ls-remote https://github.com/nghttp2/nghttp2 "$NGHTTP2_VERSION" | cut -f1)"
           sed -i "s|ARG NGHTTP2_VERSION=.*|ARG NGHTTP2_VERSION=$NGHTTP2_SHA # $NGHTTP2_VERSION|" Dockerfile
           echo "version=$NGHTTP2_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -145,8 +135,7 @@ jobs:
   zstd-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update zstd version
         id: update
         run: |
@@ -161,8 +150,7 @@ jobs:
           ZSTD_SHA="$(git ls-remote https://github.com/facebook/zstd "$ZSTD_VERSION" | cut -f1)"
           sed -i "s|ARG ZSTD_VERSION=.*|ARG ZSTD_VERSION=$ZSTD_SHA # $ZSTD_VERSION|" Dockerfile
           echo "version=$ZSTD_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -173,8 +161,7 @@ jobs:
   brotli-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update brotli version
         id: update
         run: |
@@ -188,8 +175,7 @@ jobs:
           BROTLI_SHA="$(git ls-remote https://github.com/google/brotli "$BROTLI_VERSION" | cut -f1)"
           sed -i "s|ARG BROTLI_VERSION=.*|ARG BROTLI_VERSION=$BROTLI_SHA # $BROTLI_VERSION|" Dockerfile
           echo "version=$BROTLI_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -200,8 +186,7 @@ jobs:
   zlibng-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update zlibng version
         id: update
         run: |
@@ -216,8 +201,7 @@ jobs:
           ZLIBNG_SHA="$(git ls-remote https://github.com/zlib-ng/zlib-ng "$ZLIBNG_VERSION" | cut -f1)"
           sed -i "s|ARG ZLIBNG_VERSION=.*|ARG ZLIBNG_VERSION=$ZLIBNG_SHA # $ZLIBNG_VERSION|" Dockerfile
           echo "version=$ZLIBNG_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -228,8 +212,7 @@ jobs:
   cares-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update cares version
         id: update
         run: |
@@ -243,8 +226,7 @@ jobs:
           CARES_SHA="$(git ls-remote https://github.com/c-ares/c-ares "$CARES_VERSION" | cut -f1)"
           sed -i "s|ARG CARES_VERSION=.*|ARG CARES_VERSION=$CARES_SHA # $CARES_VERSION|" Dockerfile
           echo "version=$CARES_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
@@ -255,8 +237,7 @@ jobs:
   curl-update:
     runs-on: ubuntu-slim
     steps:
-      - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - name: update curl version
         id: update
         run: |
@@ -270,8 +251,7 @@ jobs:
           CURL_SHA="$(git ls-remote https://github.com/curl/curl "$CURL_VERSION" | cut -f1)"
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_SHA # $CURL_VERSION|" Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           signoff: true
           delete-branch: true
