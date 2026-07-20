@@ -10,7 +10,7 @@ jobs:
   awslc-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update awslc version
         id: update
         run: |
@@ -35,7 +35,7 @@ jobs:
   libssh-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update libssh version
         id: update
         run: |
@@ -60,7 +60,7 @@ jobs:
   ngtcp2-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update ngtcp2 version
         id: update
         run: |
@@ -85,7 +85,7 @@ jobs:
   nghttp3-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update nghttp3 version
         id: update
         run: |
@@ -110,7 +110,7 @@ jobs:
   nghttp2-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update nghttp2 version
         id: update
         run: |
@@ -135,7 +135,7 @@ jobs:
   zstd-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update zstd version
         id: update
         run: |
@@ -161,7 +161,7 @@ jobs:
   brotli-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update brotli version
         id: update
         run: |
@@ -186,7 +186,7 @@ jobs:
   zlibng-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update zlibng version
         id: update
         run: |
@@ -212,7 +212,7 @@ jobs:
   cares-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update cares version
         id: update
         run: |
@@ -237,7 +237,7 @@ jobs:
   curl-update:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: update curl version
         id: update
         run: |
