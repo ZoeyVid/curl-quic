@@ -96,8 +96,6 @@ RUN git-clone-commit.sh https://github.com/curl/curl "$CURL_VERSION" /src/curl &
         -DCURL_DROP_UNUSED=TRUE \
         -DCURL_LTO=TRUE \
         -DCURL_CA_EMBED=/etc/ssl/certs/ca-certificates.crt \
-        -DCURL_ENABLE_NTLM=ON \
-        -DCURL_ENABLE_SMB=ON \
         -DUSE_ECH=ON \
         -DUSE_HTTPSRR=ON \
         -DUSE_PROXY_HTTP3=ON \
