@@ -9,7 +9,6 @@ ARG NGHTTP2_VERSION=93b830e2467720157cf52dc2079f6786d47095b3 # v1.69.0
 ARG ZSTD_VERSION=ac66b19e6bd6b83238bf008eecc1298105298532 # v1.5.7
 ARG BROTLI_VERSION=028fb5a23661f123017c060daa546b55cf4bde29 # v1.2.0
 ARG ZLIBNG_VERSION=12731092979c6d07f42da27da673a9f6c7b13586 # 2.3.3
-ARG LIBSSH_VERSION=76b3fa12ccf27b4fec0f730a5235a62bb22a55dd # libssh-0.12.1
 ARG CARES_VERSION=63a4c4c71b86e448bcc1c55287c35aa4aa0f4246 # v1.34.8
 ARG CURL_VERSION=3f00a2f6fa97f7721b65606954aac979dcb6caac # curl-8_21_0
 
@@ -70,12 +69,6 @@ RUN git-clone-commit.sh https://github.com/zlib-ng/zlib-ng "$ZLIBNG_VERSION" /sr
     cmake /src/zlibng -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF -DZLIB_COMPAT=ON -DBUILD_TESTING=OFF && \
     ninja install
 
-RUN git-clone-commit.sh https://git.libssh.org/projects/libssh.git "$LIBSSH_VERSION" /src/libssh && \
-    mkdir /src/libssh/build && \
-    cd /src/libssh/build && \
-    cmake /src/libssh -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF -DWITH_EXAMPLES=OFF && \
-    ninja install
-
 RUN git-clone-commit.sh https://github.com/c-ares/c-ares "$CARES_VERSION" /src/cares && \
     cd /src/cares && \
     cmake /src/cares -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF -DCARES_SHARED=OFF -DCARES_STATIC=ON -DCARES_BUILD_TOOLS=OFF && \
@@ -104,7 +97,6 @@ RUN git-clone-commit.sh https://github.com/curl/curl "$CURL_VERSION" /src/curl &
         -DCURL_BROTLI=ON \
         -DCURL_USE_CMAKECONFIG=ON \
         -DCURL_USE_LIBPSL=OFF \
-        -DCURL_USE_LIBSSH=ON \
         -DCURL_ZLIB=ON \
         -DCURL_ZSTD=ON \
         -DENABLE_ARES=ON \
