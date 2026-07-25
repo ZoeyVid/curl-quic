@@ -6,5 +6,3 @@ CURL_USE_GSASL
 ldap?
 
 other curl options?
-
-revert to wolfssl
