@@ -33,32 +33,6 @@ jobs:
           branch: update-awslc-version
           title: update awslc version to ${{ steps.update.outputs.version }}
           body: update awslc version to ${{ steps.update.outputs.version }}
-  libssh-update:
-    runs-on: ubuntu-slim
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: update libssh version
-        id: update
-        run: |
-          LIBSSH_VERSION="$(
-          git ls-remote --tags --refs https://git.libssh.org/projects/libssh.git libssh-* \
-              | cut -d/ -f3 \
-              | sed 's|rc|~&|I' \
-              | sort -V \
-              | sed 's|~||' \
-              | tail -1
-          )"
-          LIBSSH_SHA="$(git ls-remote https://git.libssh.org/projects/libssh.git "$LIBSSH_VERSION" | cut -f1)"
-          sed -i "s|ARG LIBSSH_VERSION=.*|ARG LIBSSH_VERSION=$LIBSSH_SHA # $LIBSSH_VERSION|" Dockerfile
-          echo "version=$LIBSSH_VERSION" >> $GITHUB_OUTPUT
-      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
-        with:
-          signoff: true
-          delete-branch: true
-          commit-message: update libssh version to ${{ steps.update.outputs.version }}
-          branch: update-libssh-version
-          title: update libssh version to ${{ steps.update.outputs.version }}
-          body: update libssh version to ${{ steps.update.outputs.version }}
   ngtcp2-update:
     runs-on: ubuntu-slim
     steps:
