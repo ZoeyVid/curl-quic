@@ -1,4 +1,2 @@
 CURL_USE_LIBPSL
 USE_LIBIDN2
-
-other curl options?
