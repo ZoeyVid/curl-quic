@@ -17,8 +17,9 @@ jobs:
           AWSLC_VERSION="$(
           git ls-remote --tags --refs https://github.com/aws/aws-lc \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           AWSLC_SHA="$(git ls-remote https://github.com/aws/aws-lc "$AWSLC_VERSION" | cut -f1)"
@@ -42,8 +43,9 @@ jobs:
           LIBSSH_VERSION="$(
           git ls-remote --tags --refs https://git.libssh.org/projects/libssh.git libssh-* \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           LIBSSH_SHA="$(git ls-remote https://git.libssh.org/projects/libssh.git "$LIBSSH_VERSION" | cut -f1)"
@@ -67,8 +69,9 @@ jobs:
           NGTCP2_VERSION="$(
           git ls-remote --tags --refs https://github.com/ngtcp2/ngtcp2 \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           NGTCP2_SHA="$(git ls-remote https://github.com/ngtcp2/ngtcp2 "$NGTCP2_VERSION" | cut -f1)"
@@ -92,8 +95,9 @@ jobs:
           NGHTTP3_VERSION="$(
           git ls-remote --tags --refs https://github.com/ngtcp2/nghttp3 \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           NGHTTP3_SHA="$(git ls-remote https://github.com/ngtcp2/nghttp3 "$NGHTTP3_VERSION" | cut -f1)"
@@ -117,8 +121,9 @@ jobs:
           NGHTTP2_VERSION="$(
           git ls-remote --tags --refs https://github.com/nghttp2/nghttp2 \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           NGHTTP2_SHA="$(git ls-remote https://github.com/nghttp2/nghttp2 "$NGHTTP2_VERSION" | cut -f1)"
@@ -143,8 +148,9 @@ jobs:
           git ls-remote --tags --refs https://github.com/facebook/zstd \
               | cut -d/ -f3 \
               | grep "^v\?[0-9.]\+$" \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           ZSTD_SHA="$(git ls-remote https://github.com/facebook/zstd "$ZSTD_VERSION" | cut -f1)"
@@ -168,8 +174,9 @@ jobs:
           BROTLI_VERSION="$(
           git ls-remote --tags --refs https://github.com/google/brotli \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           BROTLI_SHA="$(git ls-remote https://github.com/google/brotli "$BROTLI_VERSION" | cut -f1)"
@@ -194,8 +201,9 @@ jobs:
           git ls-remote --tags --refs https://github.com/zlib-ng/zlib-ng \
               | cut -d/ -f3 \
               | grep "^[0-9.]\+$" \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           ZLIBNG_SHA="$(git ls-remote https://github.com/zlib-ng/zlib-ng "$ZLIBNG_VERSION" | cut -f1)"
@@ -219,8 +227,9 @@ jobs:
           CARES_VERSION="$(
           git ls-remote --tags --refs https://github.com/c-ares/c-ares \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           CARES_SHA="$(git ls-remote https://github.com/c-ares/c-ares "$CARES_VERSION" | cut -f1)"
@@ -244,8 +253,9 @@ jobs:
           CURL_VERSION="$(
           git ls-remote --tags --refs https://github.com/curl/curl curl-* \
               | cut -d/ -f3 \
+              | sed 's|rc|~&|I' \
               | sort -V \
-              | grep -vi rc \
+              | sed 's|~||' \
               | tail -1
           )"
           CURL_SHA="$(git ls-remote https://github.com/curl/curl "$CURL_VERSION" | cut -f1)"
