@@ -1,8 +1,4 @@
 CURL_USE_LIBPSL
 USE_LIBIDN2
 
-CURL_USE_GSSAPI
-CURL_USE_GSASL
-ldap?
-
 other curl options?
