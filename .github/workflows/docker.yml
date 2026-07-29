@@ -14,7 +14,7 @@ jobs:
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
       - name: ghcr.io-login
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
@@ -36,7 +36,7 @@ jobs:
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
       - name: ghcr.io-login
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
@@ -61,12 +61,12 @@ jobs:
         run: |
           echo "version=$(echo $(cat Dockerfile | grep "^ARG CURL_VERSION=.*$" | sed "s|ARG CURL_VERSION=.* # ||g" | sed "s|_|\.|g")-awslc-$(cat Dockerfile | grep "^ARG AWSLC_VERSION=.*$" | sed "s|ARG AWSLC_VERSION=.* # v||g")-ngtcp2-$(cat Dockerfile | grep "^ARG NGTCP2_VERSION=.*$" | sed "s|ARG NGTCP2_VERSION=.* # v||g")-nghttp3-$(cat Dockerfile | grep "^ARG NGHTTP3_VERSION=.*$" | sed "s|ARG NGHTTP3_VERSION=.* # v||g")-nghttp2-$(cat Dockerfile | grep "^ARG NGHTTP2_VERSION=.*$" | sed "s|ARG NGHTTP2_VERSION=.* # v||g")-zstd-$(cat Dockerfile | grep "^ARG ZSTD_VERSION=.*$" | sed "s|ARG ZSTD_VERSION=.* # v||g")-brotli-$(cat Dockerfile | grep "^ARG BROTLI_VERSION=.*$" | sed "s|ARG BROTLI_VERSION=.* # v||g")-zlibng-$(cat Dockerfile | grep "^ARG ZLIBNG_VERSION=.*$" | sed "s|ARG ZLIBNG_VERSION=.* # ||g")-cares-$(cat Dockerfile | grep "^ARG CARES_VERSION=.*$" | sed "s|ARG CARES_VERSION=.* # v||g"))" >> $GITHUB_OUTPUT
       - name: docker.io-login
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: ghcr.io-login
-        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: zoeyvid
