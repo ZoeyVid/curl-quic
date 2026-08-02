@@ -20,6 +20,6 @@ jobs:
             # DL3003 warning: Use WORKDIR to switch to a directory
             ./hadolint "$file" --ignore DL3018 --ignore DL3003 | tee -a hadolint.log
           done
-          if [ -n "$(cat hadolint.log)" ]; then
+          if [ -s hadolint.log ]; then
             exit 1
           fi
