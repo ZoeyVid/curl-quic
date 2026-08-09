@@ -6,6 +6,15 @@ on:
   schedule:
     - cron: "0 * * * *"
   workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
 jobs:
   awslc-update:
     runs-on: ubuntu-slim
@@ -23,6 +32,7 @@ jobs:
               | tail -1
           )"
           AWSLC_SHA="$(git ls-remote https://github.com/aws/aws-lc "$AWSLC_VERSION" | cut -f1)"
+          echo "compare=https://github.com/aws/aws-lc/compare/$(sed -n 's|^ARG AWSLC_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$AWSLC_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG AWSLC_VERSION=.*|ARG AWSLC_VERSION=$AWSLC_SHA # $AWSLC_VERSION|" Dockerfile
           echo "version=$AWSLC_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -32,7 +42,7 @@ jobs:
           commit-message: update awslc version to ${{ steps.update.outputs.version }}
           branch: update-awslc-version
           title: update awslc version to ${{ steps.update.outputs.version }}
-          body: update awslc version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   ngtcp2-update:
     runs-on: ubuntu-slim
     steps:
@@ -49,6 +59,7 @@ jobs:
               | tail -1
           )"
           NGTCP2_SHA="$(git ls-remote https://github.com/ngtcp2/ngtcp2 "$NGTCP2_VERSION" | cut -f1)"
+          echo "compare=https://github.com/ngtcp2/ngtcp2/compare/$(sed -n 's|^ARG NGTCP2_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$NGTCP2_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG NGTCP2_VERSION=.*|ARG NGTCP2_VERSION=$NGTCP2_SHA # $NGTCP2_VERSION|" Dockerfile
           echo "version=$NGTCP2_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -58,7 +69,7 @@ jobs:
           commit-message: update ngtcp2 version to ${{ steps.update.outputs.version }}
           branch: update-ngtcp2-version
           title: update ngtcp2 version to ${{ steps.update.outputs.version }}
-          body: update ngtcp2 version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   nghttp3-update:
     runs-on: ubuntu-slim
     steps:
@@ -75,6 +86,7 @@ jobs:
               | tail -1
           )"
           NGHTTP3_SHA="$(git ls-remote https://github.com/ngtcp2/nghttp3 "$NGHTTP3_VERSION" | cut -f1)"
+          echo "compare=https://github.com/ngtcp2/nghttp3/compare/$(sed -n 's|^ARG NGHTTP3_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$NGHTTP3_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG NGHTTP3_VERSION=.*|ARG NGHTTP3_VERSION=$NGHTTP3_SHA # $NGHTTP3_VERSION|" Dockerfile
           echo "version=$NGHTTP3_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -84,7 +96,7 @@ jobs:
           commit-message: update nghttp3 version to ${{ steps.update.outputs.version }}
           branch: update-nghttp3-version
           title: update nghttp3 version to ${{ steps.update.outputs.version }}
-          body: update nghttp3 version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   nghttp2-update:
     runs-on: ubuntu-slim
     steps:
@@ -101,6 +113,7 @@ jobs:
               | tail -1
           )"
           NGHTTP2_SHA="$(git ls-remote https://github.com/nghttp2/nghttp2 "$NGHTTP2_VERSION" | cut -f1)"
+          echo "compare=https://github.com/nghttp2/nghttp2/compare/$(sed -n 's|^ARG NGHTTP2_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$NGHTTP2_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG NGHTTP2_VERSION=.*|ARG NGHTTP2_VERSION=$NGHTTP2_SHA # $NGHTTP2_VERSION|" Dockerfile
           echo "version=$NGHTTP2_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -110,7 +123,7 @@ jobs:
           commit-message: update nghttp2 version to ${{ steps.update.outputs.version }}
           branch: update-nghttp2-version
           title: update nghttp2 version to ${{ steps.update.outputs.version }}
-          body: update nghttp2 version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   zstd-update:
     runs-on: ubuntu-slim
     steps:
@@ -128,6 +141,7 @@ jobs:
               | tail -1
           )"
           ZSTD_SHA="$(git ls-remote https://github.com/facebook/zstd "$ZSTD_VERSION" | cut -f1)"
+          echo "compare=https://github.com/facebook/zstd/compare/$(sed -n 's|^ARG ZSTD_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$ZSTD_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG ZSTD_VERSION=.*|ARG ZSTD_VERSION=$ZSTD_SHA # $ZSTD_VERSION|" Dockerfile
           echo "version=$ZSTD_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -137,7 +151,7 @@ jobs:
           commit-message: update zstd version to ${{ steps.update.outputs.version }}
           branch: update-zstd-version
           title: update zstd version to ${{ steps.update.outputs.version }}
-          body: update zstd version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   brotli-update:
     runs-on: ubuntu-slim
     steps:
@@ -154,6 +168,7 @@ jobs:
               | tail -1
           )"
           BROTLI_SHA="$(git ls-remote https://github.com/google/brotli "$BROTLI_VERSION" | cut -f1)"
+          echo "compare=https://github.com/google/brotli/compare/$(sed -n 's|^ARG BROTLI_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$BROTLI_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG BROTLI_VERSION=.*|ARG BROTLI_VERSION=$BROTLI_SHA # $BROTLI_VERSION|" Dockerfile
           echo "version=$BROTLI_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -163,7 +178,7 @@ jobs:
           commit-message: update brotli version to ${{ steps.update.outputs.version }}
           branch: update-brotli-version
           title: update brotli version to ${{ steps.update.outputs.version }}
-          body: update brotli version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   zlibng-update:
     runs-on: ubuntu-slim
     steps:
@@ -181,6 +196,7 @@ jobs:
               | tail -1
           )"
           ZLIBNG_SHA="$(git ls-remote https://github.com/zlib-ng/zlib-ng "$ZLIBNG_VERSION" | cut -f1)"
+          echo "compare=https://github.com/zlib-ng/zlib-ng/compare/$(sed -n 's|^ARG ZLIBNG_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$ZLIBNG_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG ZLIBNG_VERSION=.*|ARG ZLIBNG_VERSION=$ZLIBNG_SHA # $ZLIBNG_VERSION|" Dockerfile
           echo "version=$ZLIBNG_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -190,7 +206,7 @@ jobs:
           commit-message: update zlibng version to ${{ steps.update.outputs.version }}
           branch: update-zlibng-version
           title: update zlibng version to ${{ steps.update.outputs.version }}
-          body: update zlibng version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   cares-update:
     runs-on: ubuntu-slim
     steps:
@@ -207,6 +223,7 @@ jobs:
               | tail -1
           )"
           CARES_SHA="$(git ls-remote https://github.com/c-ares/c-ares "$CARES_VERSION" | cut -f1)"
+          echo "compare=https://github.com/c-ares/c-ares/compare/$(sed -n 's|^ARG CARES_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$CARES_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG CARES_VERSION=.*|ARG CARES_VERSION=$CARES_SHA # $CARES_VERSION|" Dockerfile
           echo "version=$CARES_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -216,7 +233,7 @@ jobs:
           commit-message: update cares version to ${{ steps.update.outputs.version }}
           branch: update-cares-version
           title: update cares version to ${{ steps.update.outputs.version }}
-          body: update cares version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
   curl-update:
     runs-on: ubuntu-slim
     steps:
@@ -233,6 +250,7 @@ jobs:
               | tail -1
           )"
           CURL_SHA="$(git ls-remote https://github.com/curl/curl "$CURL_VERSION" | cut -f1)"
+          echo "compare=https://github.com/curl/curl/compare/$(sed -n 's|^ARG CURL_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$CURL_SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG CURL_VERSION=.*|ARG CURL_VERSION=$CURL_SHA # $CURL_VERSION|" Dockerfile
           echo "version=$CURL_VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -242,4 +260,4 @@ jobs:
           commit-message: update curl version to ${{ steps.update.outputs.version }}
           branch: update-curl-version
           title: update curl version to ${{ steps.update.outputs.version }}
-          body: update curl version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
