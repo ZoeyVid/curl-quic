@@ -96,13 +96,13 @@ jobs:
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
           docker run -d --pull always --platform arm64 --name curl-aarch64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           archive: false
           path: curl-x86_64
           if-no-files-found: error
           retention-days: 3
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           archive: false
           path: curl-aarch64
