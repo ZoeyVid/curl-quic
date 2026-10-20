@@ -67,7 +67,7 @@ jobs:
               | sed 's|~||' \
               | tail -1
           )"
-          SHA="$(git ls-remote https://github.com/${{ matrix.repo }} "$VERSION" | cut -f1)"
+          SHA="$(git ls-remote https://github.com/${{ matrix.repo }} "$VERSION" "$VERSION^{}" | tail -1 | cut -f1)"
           echo "compare=https://github.com/${{ matrix.repo }}/compare/$(sed -n 's|^ARG ${{ matrix.arg }}_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG ${{ matrix.arg }}_VERSION=.*|ARG ${{ matrix.arg }}_VERSION=$SHA # $VERSION|" Dockerfile
           echo "version=$VERSION" >> $GITHUB_OUTPUT
