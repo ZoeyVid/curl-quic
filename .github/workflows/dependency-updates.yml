@@ -49,6 +49,10 @@ jobs:
           - name: cares
             arg: CARES
             repo: c-ares/c-ares
+          - name: libpsl
+            arg: LIBPSL
+            repo: rockdaboot/libpsl
+            filter: ^[0-9.]\+$
           - name: curl
             arg: CURL
             repo: curl/curl
@@ -70,6 +74,50 @@ jobs:
           SHA="$(git ls-remote https://github.com/${{ matrix.repo }} "$VERSION" "$VERSION^{}" | tail -1 | cut -f1)"
           echo "compare=https://github.com/${{ matrix.repo }}/compare/$(sed -n 's|^ARG ${{ matrix.arg }}_VERSION=\(.*\) #.*|\1|p' Dockerfile)...$SHA" >> $GITHUB_OUTPUT
           sed -i "s|ARG ${{ matrix.arg }}_VERSION=.*|ARG ${{ matrix.arg }}_VERSION=$SHA # $VERSION|" Dockerfile
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          signoff: true
+          delete-branch: true
+          commit-message: update ${{ matrix.name }} version to ${{ steps.update.outputs.version }}
+          branch: update-${{ matrix.name }}-version
+          title: update ${{ matrix.name }} version to ${{ steps.update.outputs.version }}
+          body: ${{ steps.update.outputs.compare }}
+  tarball-updates:
+    name: ${{ matrix.name }}-update
+    runs-on: ubuntu-slim
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: libunistring
+            arg: LIBUNISTRING
+            repo: https://git.savannah.gnu.org/git/libunistring.git
+            tarball: https://ftp.gnu.org/gnu/libunistring/libunistring-@VERSION@.tar.gz
+          - name: libidn2
+            arg: LIBIDN2
+            repo: https://gitlab.com/libidn/libidn2
+            tarball: https://ftp.gnu.org/gnu/libidn/libidn2-@VERSION@.tar.gz
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: update ${{ matrix.name }} version
+        id: update
+        run: |
+          VERSION="$(
+          git ls-remote --tags --refs ${{ matrix.repo }} ${{ matrix.pattern }} \
+              | cut -d/ -f3 \
+              | grep "^v[0-9.]\+$" \
+              | sed 's|rc|~&|I' \
+              | sort -V \
+              | sed 's|~||' \
+              | tail -1 \
+              | sed 's|^v||'
+          )"
+          curl -sSfL "$(echo "${{ matrix.tarball }}" | sed "s|@VERSION@|$VERSION|")" -o source.tar.gz
+          echo "compare=${{ matrix.repo }}: $(sed -n 's|^ARG ${{ matrix.arg }}_VERSION=||p' Dockerfile) -> $VERSION" >> $GITHUB_OUTPUT
+          sed -i "s|^ARG ${{ matrix.arg }}_VERSION=.*|ARG ${{ matrix.arg }}_VERSION=$VERSION|" Dockerfile
+          sed -i "s|^ARG ${{ matrix.arg }}_SHA256=.*|ARG ${{ matrix.arg }}_SHA256=$(sha256sum source.tar.gz | cut -d" " -f1)|" Dockerfile
+          rm source.tar.gz
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:

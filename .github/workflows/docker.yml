@@ -72,7 +72,7 @@ jobs:
       - name: version
         id: version
         run: |
-          echo "version=$(sed -n "s|^ARG CURL_VERSION=.* # ||p" Dockerfile | tr "_" ".")-awslc-$(sed -n "s|^ARG AWSLC_VERSION=.* # v||p" Dockerfile)-ngtcp2-$(sed -n "s|^ARG NGTCP2_VERSION=.* # v||p" Dockerfile)-nghttp3-$(sed -n "s|^ARG NGHTTP3_VERSION=.* # v||p" Dockerfile)-nghttp2-$(sed -n "s|^ARG NGHTTP2_VERSION=.* # v||p" Dockerfile)-zstd-$(sed -n "s|^ARG ZSTD_VERSION=.* # v||p" Dockerfile)-brotli-$(sed -n "s|^ARG BROTLI_VERSION=.* # v||p" Dockerfile)-zlibng-$(sed -n "s|^ARG ZLIBNG_VERSION=.* # ||p" Dockerfile)-cares-$(sed -n "s|^ARG CARES_VERSION=.* # v||p" Dockerfile)" >> $GITHUB_OUTPUT
+          echo "version=$(sed -n "s|^ARG CURL_VERSION=.* # ||p" Dockerfile | tr "_" ".")-awslc-$(sed -n "s|^ARG AWSLC_VERSION=.* # v||p" Dockerfile)-ngtcp2-$(sed -n "s|^ARG NGTCP2_VERSION=.* # v||p" Dockerfile)-nghttp3-$(sed -n "s|^ARG NGHTTP3_VERSION=.* # v||p" Dockerfile)-nghttp2-$(sed -n "s|^ARG NGHTTP2_VERSION=.* # v||p" Dockerfile)-zstd-$(sed -n "s|^ARG ZSTD_VERSION=.* # v||p" Dockerfile)-brotli-$(sed -n "s|^ARG BROTLI_VERSION=.* # v||p" Dockerfile)-zlibng-$(sed -n "s|^ARG ZLIBNG_VERSION=.* # ||p" Dockerfile)-cares-$(sed -n "s|^ARG CARES_VERSION=.* # v||p" Dockerfile)-libunistring-$(sed -n "s|^ARG LIBUNISTRING_VERSION=||p" Dockerfile)-libidn2-$(sed -n "s|^ARG LIBIDN2_VERSION=||p" Dockerfile)-libpsl-$(sed -n "s|^ARG LIBPSL_VERSION=.* # ||p" Dockerfile)" >> $GITHUB_OUTPUT
       - name: docker.io-login
         uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:

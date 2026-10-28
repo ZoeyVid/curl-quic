@@ -1,3 +1,0 @@
-CURL_USE_LIBPSL
-USE_LIBIDN2
-/usr => /usr/local
