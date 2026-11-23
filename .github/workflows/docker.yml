@@ -16,18 +16,18 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: actions/checkout@v7.0.1
+      - uses: docker/setup-buildx-action@v4.4.1
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
       - name: ghcr.io-login
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        uses: docker/login-action@v4.8.0
         if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
           username: zoeyvid
           password: ${{ github.token }}
-      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      - uses: docker/build-push-action@v7.4.0
         with:
           context: .
           push: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
@@ -41,18 +41,18 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: actions/checkout@v7.0.1
+      - uses: docker/setup-buildx-action@v4.4.1
         with:
           driver-opts: env.BUILDKIT_STEP_LOG_MAX_SIZE=-1
       - name: ghcr.io-login
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        uses: docker/login-action@v4.8.0
         if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
         with:
           registry: ghcr.io
           username: zoeyvid
           password: ${{ github.token }}
-      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      - uses: docker/build-push-action@v7.4.0
         with:
           context: .
           push: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
@@ -68,18 +68,18 @@ jobs:
     needs: [build-x86_64, build-aarch64]
     if: ${{ github.repository_owner == 'ZoeyVid' && github.event_name != 'pull_request' }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - name: version
         id: version
         run: |
           echo "version=$(sed -n "s|^ARG CURL_VERSION=.* # ||p" Dockerfile | tr "_" ".")-awslc-$(sed -n "s|^ARG AWSLC_VERSION=.* # v||p" Dockerfile)-ngtcp2-$(sed -n "s|^ARG NGTCP2_VERSION=.* # v||p" Dockerfile)-nghttp3-$(sed -n "s|^ARG NGHTTP3_VERSION=.* # v||p" Dockerfile)-nghttp2-$(sed -n "s|^ARG NGHTTP2_VERSION=.* # v||p" Dockerfile)-zstd-$(sed -n "s|^ARG ZSTD_VERSION=.* # v||p" Dockerfile)-brotli-$(sed -n "s|^ARG BROTLI_VERSION=.* # v||p" Dockerfile)-zlibng-$(sed -n "s|^ARG ZLIBNG_VERSION=.* # ||p" Dockerfile)-cares-$(sed -n "s|^ARG CARES_VERSION=.* # v||p" Dockerfile)-libunistring-$(sed -n "s|^ARG LIBUNISTRING_VERSION=||p" Dockerfile)-libidn2-$(sed -n "s|^ARG LIBIDN2_VERSION=||p" Dockerfile)-libpsl-$(sed -n "s|^ARG LIBPSL_VERSION=.* # ||p" Dockerfile)" >> $GITHUB_OUTPUT
       - name: docker.io-login
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        uses: docker/login-action@v4.8.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: ghcr.io-login
-        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        uses: docker/login-action@v4.8.0
         with:
           registry: ghcr.io
           username: zoeyvid
@@ -96,13 +96,13 @@ jobs:
           docker cp curl-x86_64:/usr/local/bin/curl curl-x86_64
           docker run -d --pull always --platform arm64 --name curl-aarch64 ghcr.io/zoeyvid/curl-quic:latest-aarch64
           docker cp curl-aarch64:/usr/local/bin/curl curl-aarch64
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           archive: false
           path: curl-x86_64
           if-no-files-found: error
           retention-days: 3
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@v7.0.2
         with:
           archive: false
           path: curl-aarch64
