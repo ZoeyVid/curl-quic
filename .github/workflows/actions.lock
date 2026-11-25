@@ -16,7 +16,6 @@ workflows:
         - 'actions/checkout@v7.0.1'
     '.github/workflows/jsoncheck.yml':
         - 'actions/checkout@v7.0.1'
-        - 'limitusus/json-syntax-check@v2.0.3'
     '.github/workflows/shellcheck.yml':
         - 'actions/checkout@v7.0.1'
         - 'ludeeus/action-shellcheck@master'
@@ -54,11 +53,6 @@ dependencies:
         commit: 'sha1-f87e5991a6d7451dcb8d9637bfbc97413f497069'
         owner_id: 5429470
         repo_id: 288485773
-    'limitusus/json-syntax-check@v2.0.3':
-        ref: 'v2.0.3'
-        commit: 'sha1-6e25e4304c75d72195ad8c6fca739cb2e99c3fb1'
-        owner_id: 133476
-        repo_id: 307910495
     'ludeeus/action-shellcheck@master':
         ref: 'master'
         commit: 'sha1-00b27aa7cb85167568cb48a3838b75f4265f2bca'
